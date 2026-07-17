@@ -1,11 +1,17 @@
 import { Phone, Mail, MapPin, Globe } from 'lucide-react'
 
 const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Practice Areas', href: '#practice-areas' },
-  { label: 'Our Mediators', href: '#mediators' },
-  { label: 'Schedule', href: '/schedule' },
+  { label: 'Home', href: '/#home' },
+  { label: 'About', href: '/#about' },
+  { label: 'Practice Areas', href: '/#practice-areas' },
+  { label: 'Our Mediators', href: '/#mediators' },
+  { label: 'Contact', href: '/#contact' },
+]
+
+const scheduleLinks = [
+  { label: 'Schedule a Mediation', href: '/schedule' },
+  { label: 'Stephen G. Brannan, Esq.', href: '/schedule/stephen' },
+  { label: 'Kevin B. Woods, Esq.', href: '/schedule/kevin' },
 ]
 
 const contactItems = [
@@ -45,7 +51,7 @@ export default function Footer() {
 
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           {/* Brand column */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
@@ -72,7 +78,7 @@ export default function Footer() {
             </p>
             <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/55 text-sm leading-relaxed">
               Certified Federal &amp; State Circuit Court Mediators serving Sarasota and Southwest
-              Florida since decades. Resolving conflict. Restoring solutions.
+              Florida. Resolving conflict. Restoring solutions.
             </p>
           </div>
 
@@ -83,6 +89,25 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/60 text-sm hover:text-[#B99B5A] transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Scheduling column */}
+          <div>
+            <h3 className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.2em] uppercase mb-5">
+              Scheduling
+            </h3>
+            <ul className="space-y-3">
+              {scheduleLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}

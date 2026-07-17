@@ -1,24 +1,44 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Menu, X, Phone } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Menu, X, Phone, ChevronDown } from 'lucide-react'
 
 const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Practice Areas', href: '#practice-areas' },
-  { label: 'Our Mediators', href: '#mediators' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/#home' },
+  { label: 'About', href: '/#about' },
+  { label: 'Practice Areas', href: '/#practice-areas' },
+  { label: 'Our Mediators', href: '/#mediators' },
+  { label: 'Contact', href: '/#contact' },
+]
+
+const scheduleLinks = [
+  { label: 'Schedule a Mediation', href: '/schedule', sub: 'Choose a mediator' },
+  { label: 'Stephen G. Brannan', href: '/schedule/stephen', sub: 'Sarasota, FL' },
+  { label: 'Kevin B. Woods', href: '/schedule/kevin', sub: 'Tampa, FL' },
 ]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scheduleOpen, setScheduleOpen] = useState(false)
+  const [mobileScheduleOpen, setMobileScheduleOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setScheduleOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
@@ -29,7 +49,7 @@ export default function Navbar() {
           : 'bg-[#0A1B2E]/80 backdrop-blur-sm'
       }`}
     >
-      {/* Top bar */}
+      {/* Top contact bar */}
       <div className="bg-[#23423D] py-2 px-4 hidden md:block">
         <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
           <a
@@ -51,9 +71,9 @@ export default function Navbar() {
       {/* Main nav */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
+
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-3 group">
-            {/* WC Monogram */}
+          <a href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 md:w-12 md:h-12 border-2 border-[#B99B5A] flex items-center justify-center shrink-0">
               <span className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-lg md:text-xl font-bold italic leading-none">
                 WC
@@ -73,7 +93,7 @@ export default function Navbar() {
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => (
               <a
@@ -85,12 +105,44 @@ export default function Navbar() {
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#B99B5A] group-hover:w-full transition-all duration-300" />
               </a>
             ))}
-            <a
-              href="/schedule"
-              className="ml-2 px-4 lg:px-6 py-2 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#c9ab6a] transition-colors duration-200"
-            >
-              Schedule
-            </a>
+
+            {/* Schedule dropdown */}
+            <div className="relative ml-2" ref={dropdownRef}>
+              <button
+                onClick={() => setScheduleOpen(!scheduleOpen)}
+                className="flex items-center gap-1.5 px-4 lg:px-6 py-2 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#c9ab6a] transition-colors duration-200"
+                aria-expanded={scheduleOpen}
+                aria-haspopup="true"
+              >
+                Schedule
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${scheduleOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {scheduleOpen && (
+                <div className="absolute right-0 top-full mt-1 w-56 bg-[#0A1B2E] border border-[#B99B5A]/30 shadow-xl shadow-black/40 z-50">
+                  {scheduleLinks.map((link, i) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setScheduleOpen(false)}
+                      className={`flex flex-col px-4 py-3 hover:bg-[#23423D] transition-colors group ${
+                        i < scheduleLinks.length - 1 ? 'border-b border-[#B99B5A]/15' : ''
+                      }`}
+                    >
+                      <span className="font-[family-name:var(--font-sub)] text-[#F2F2F0] text-sm group-hover:text-[#B99B5A] transition-colors">
+                        {link.label}
+                      </span>
+                      <span className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/40 text-xs mt-0.5">
+                        {link.sub}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Mobile menu toggle */}
@@ -120,6 +172,7 @@ export default function Navbar() {
               (941) 792-1695
             </a>
           </div>
+
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -130,14 +183,34 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="px-4 pt-3">
-            <a
-              href="/schedule"
-              onClick={() => setMenuOpen(false)}
-              className="block text-center py-3 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-widest uppercase"
+
+          {/* Mobile schedule accordion */}
+          <div className="border-b border-white/5">
+            <button
+              onClick={() => setMobileScheduleOpen(!mobileScheduleOpen)}
+              className="w-full flex items-center justify-between px-6 py-3 text-[#B99B5A] font-[family-name:var(--font-sub)] text-sm tracking-wide font-semibold"
             >
-              Schedule Mediation
-            </a>
+              Schedule
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${mobileScheduleOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            {mobileScheduleOpen && (
+              <div className="bg-[#23423D]/20">
+                {scheduleLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between px-8 py-2.5 text-[#F2F2F0]/70 hover:text-[#B99B5A] font-[family-name:var(--font-sub)] text-sm tracking-wide transition-colors border-b border-white/5"
+                  >
+                    {link.label}
+                    <span className="text-[#F2F2F0]/35 text-xs">{link.sub}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </nav>
       )}
