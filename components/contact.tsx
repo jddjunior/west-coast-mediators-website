@@ -25,7 +25,7 @@ const contactInfo = [
   {
     icon: Clock,
     label: 'Scheduling',
-    value: 'Contact Lucy S. Black to schedule',
+    value: 'Contact us to schedule',
     href: null,
   },
 ]
@@ -122,8 +122,8 @@ export default function Contact() {
                 Ready to schedule?
               </p>
               <p className="font-[family-name:var(--font-sans)] text-[#0A1B2E]/80 text-sm leading-relaxed mb-4">
-                Call or email our scheduling coordinator Lucy S. Black directly to arrange your
-                mediation at a time that works for all parties.
+                Call or email our scheduling team directly to arrange your mediation at a time
+                that works for all parties.
               </p>
               <a
                 href="tel:9417921695"

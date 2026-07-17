@@ -172,8 +172,8 @@ export default function ScheduleHubPage() {
             Our scheduling team is ready to assist you
           </p>
           <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/65 text-sm leading-relaxed max-w-lg mx-auto mb-7">
-            Contact Lucy S. Black directly to coordinate dates, locations, and logistics for your
-            mediation session with either of our certified mediators.
+            Contact our scheduling team directly to coordinate dates, locations, and logistics for
+            your mediation session with either of our certified mediators.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
