@@ -5,7 +5,7 @@ const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Practice Areas', href: '#practice-areas' },
   { label: 'Our Mediators', href: '#mediators' },
-  { label: 'Schedule', href: '#contact' },
+  { label: 'Schedule', href: '/schedule' },
 ]
 
 const contactItems = [

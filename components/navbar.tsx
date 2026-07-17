@@ -86,7 +86,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="#contact"
+              href="/schedule"
               className="ml-2 px-4 lg:px-6 py-2 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#c9ab6a] transition-colors duration-200"
             >
               Schedule
@@ -132,7 +132,7 @@ export default function Navbar() {
           ))}
           <div className="px-4 pt-3">
             <a
-              href="#contact"
+              href="/schedule"
               onClick={() => setMenuOpen(false)}
               className="block text-center py-3 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-widest uppercase"
             >
