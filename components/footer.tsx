@@ -4,7 +4,7 @@ const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
   { label: 'Practice Areas', href: '#practice-areas' },
-  { label: 'Stephen Brannan', href: '#mediator' },
+  { label: 'Our Mediators', href: '#mediators' },
   { label: 'Schedule', href: '#contact' },
 ]
 
@@ -68,7 +68,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/45 text-xs tracking-widest uppercase mb-4">
-              Stephen G. Brannan, Esq.
+              Stephen G. Brannan &amp; Kevin B. Woods, Esq.
             </p>
             <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/55 text-sm leading-relaxed">
               Certified Federal &amp; State Circuit Court Mediators serving Sarasota and Southwest

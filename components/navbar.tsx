@@ -7,7 +7,7 @@ const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
   { label: 'Practice Areas', href: '#practice-areas' },
-  { label: 'Stephen Brannan', href: '#mediator' },
+  { label: 'Our Mediators', href: '#mediators' },
   { label: 'Contact', href: '#contact' },
 ]
 
