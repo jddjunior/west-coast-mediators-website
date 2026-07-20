@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin, Globe } from 'lucide-react'
+import WestCoastLogo from '@/components/west-coast-logo'
 
 const navLinks = [
   { label: 'Home', href: '/#home' },
@@ -54,27 +55,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           {/* Brand column */}
           <div className="md:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 border-2 border-[#B99B5A] flex items-center justify-center">
-                <span className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-xl font-bold italic">
-                  WC
-                </span>
-              </div>
-              <div>
-                <p className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-lg font-bold leading-tight">
-                  West Coast
-                </p>
-                <div className="flex items-center gap-1.5">
-                  <div className="h-px w-3 bg-[#B99B5A]" />
-                  <span className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.2em] uppercase">
-                    Mediators
-                  </span>
-                  <div className="h-px w-3 bg-[#B99B5A]" />
-                </div>
-              </div>
-            </div>
+            <a href="/" aria-label="West Coast Mediators — Home" className="inline-block mb-5">
+              <WestCoastLogo height={72} variant="light" showByline={true} />
+            </a>
             <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/45 text-xs tracking-widest uppercase mb-4">
-              Stephen G. Brannan &amp; Kevin B. Woods, Esq.
+              &amp; Kevin B. Woods, Esq.
             </p>
             <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/55 text-sm leading-relaxed">
               Certified Federal &amp; State Circuit Court Mediators serving Sarasota and Southwest

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Menu, X, Phone, ChevronDown } from 'lucide-react'
+import WestCoastLogo from '@/components/west-coast-logo'
 
 const navLinks = [
   { label: 'Home', href: '/#home' },
@@ -73,24 +74,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
 
           {/* Logo */}
-          <a href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 md:w-12 md:h-12 border-2 border-[#B99B5A] flex items-center justify-center shrink-0">
-              <span className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-lg md:text-xl font-bold italic leading-none">
-                WC
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-base md:text-lg font-bold leading-tight tracking-wide">
-                West Coast
-              </span>
-              <div className="flex items-center gap-1.5">
-                <div className="h-px w-3 bg-[#B99B5A]" />
-                <span className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.2em] uppercase font-semibold">
-                  Mediators
-                </span>
-                <div className="h-px w-3 bg-[#B99B5A]" />
-              </div>
-            </div>
+          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
+            <WestCoastLogo height={44} variant="light" showByline={false} className="hidden md:block" />
+            <WestCoastLogo height={36} variant="light" showByline={false} className="md:hidden" />
           </a>
 
           {/* Desktop nav */}
