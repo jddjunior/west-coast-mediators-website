@@ -55,13 +55,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           {/* Brand column */}
           <div className="md:col-span-1">
-            <a href="/" aria-label="West Coast Mediators — Home" className="inline-block mb-5 bg-[#F2F2F0] px-3 py-2">
+            <a href="/" aria-label="West Coast Mediators — Home" className="inline-block mb-5">
               <Image
                 src="/wcm-logo.png"
                 alt="West Coast Mediators"
-                width={240}
-                height={69}
-                className="w-44 h-auto"
+                width={280}
+                height={80}
+                className="w-52 h-auto"
               />
             </a>
             <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/45 text-xs tracking-widest uppercase mb-4">
