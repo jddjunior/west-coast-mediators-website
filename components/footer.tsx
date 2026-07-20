@@ -65,7 +65,7 @@ export default function Footer() {
               />
             </a>
             <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/45 text-xs tracking-widest uppercase mb-4">
-              &amp; Kevin B. Woods, Esq.
+              Stephen G. Brannan, Esq. &amp; Kevin B. Woods, Esq.
             </p>
             <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/55 text-sm leading-relaxed">
               Certified Federal &amp; State Circuit Court Mediators serving Sarasota and Southwest
