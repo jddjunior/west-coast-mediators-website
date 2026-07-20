@@ -57,11 +57,11 @@ export default function Footer() {
           <div className="md:col-span-1">
             <a href="/" aria-label="West Coast Mediators — Home" className="inline-block mb-5">
               <Image
-                src="/wcm-logo.png"
+                src="/wcm-logo-white.jpg"
                 alt="West Coast Mediators"
-                width={280}
-                height={80}
-                className="w-52 h-auto"
+                width={320}
+                height={91}
+                className="w-56 h-auto"
               />
             </a>
             <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/45 text-xs tracking-widest uppercase mb-4">

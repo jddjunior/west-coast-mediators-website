@@ -76,19 +76,19 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
             <Image
-              src="/wcm-logo.png"
+              src="/wcm-logo-white.jpg"
               alt="West Coast Mediators"
-              width={260}
-              height={74}
-              className="h-14 w-auto hidden md:block"
+              width={320}
+              height={91}
+              className="h-16 w-auto hidden md:block"
               priority
             />
             <Image
-              src="/wcm-logo.png"
+              src="/wcm-logo-white.jpg"
               alt="West Coast Mediators"
-              width={190}
-              height={54}
-              className="h-10 w-auto md:hidden"
+              width={210}
+              height={60}
+              className="h-11 w-auto md:hidden"
               priority
             />
           </a>
