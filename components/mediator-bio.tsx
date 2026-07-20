@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Award, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { Award, CheckCircle, ChevronDown, ChevronUp, CalendarDays } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const attorneys = [
   {
@@ -131,6 +132,15 @@ function AttorneyCard({ attorney }: { attorney: typeof attorneys[0] }) {
             </ul>
           </div>
         )}
+
+        {/* Schedule CTA */}
+        <Link
+          href={`/schedule/${attorney.id}`}
+          className="mt-6 w-full flex items-center justify-center gap-2 bg-[#23423D] text-[#F2F2F0] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-[0.15em] uppercase px-6 py-4 hover:bg-[#0A1B2E] transition-colors duration-200 group"
+        >
+          <CalendarDays size={16} className="text-[#B99B5A]" strokeWidth={1.5} />
+          Schedule with {attorney.name.split(' ')[0]}
+        </Link>
       </div>
     </div>
   )

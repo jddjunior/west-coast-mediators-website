@@ -122,16 +122,23 @@ export default function Contact() {
                 Ready to schedule?
               </p>
               <p className="font-[family-name:var(--font-sans)] text-[#0A1B2E]/80 text-sm leading-relaxed mb-4">
-                Call or email our scheduling team directly to arrange your mediation at a time
-                that works for all parties.
+                Choose your mediator and select a date that works for all parties.
               </p>
-              <a
-                href="tel:9417921695"
-                className="inline-flex items-center gap-2 bg-[#0A1B2E] text-[#F2F2F0] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase px-5 py-3 hover:bg-[#23423D] transition-colors"
-              >
-                <Phone size={14} />
-                Call Now
-              </a>
+              <div className="flex flex-col gap-3">
+                <a
+                  href="/schedule"
+                  className="inline-flex items-center justify-center gap-2 bg-[#0A1B2E] text-[#F2F2F0] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase px-5 py-3 hover:bg-[#23423D] transition-colors"
+                >
+                  Choose Your Mediator
+                </a>
+                <a
+                  href="tel:9417921695"
+                  className="inline-flex items-center justify-center gap-2 border border-[#0A1B2E] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase px-5 py-3 hover:bg-[#0A1B2E]/10 transition-colors"
+                >
+                  <Phone size={14} />
+                  (941) 792-1695
+                </a>
+              </div>
             </div>
           </div>
 

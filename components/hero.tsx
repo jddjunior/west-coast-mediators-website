@@ -50,7 +50,7 @@ export default function Hero() {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
-            href="#contact"
+            href="/schedule"
             className="w-full sm:w-auto px-8 py-4 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-bold tracking-[0.15em] uppercase hover:bg-[#c9ab6a] transition-colors duration-200 min-w-[200px] text-center"
           >
             Schedule Mediation
