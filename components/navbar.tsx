@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Menu, X, Phone, ChevronDown } from 'lucide-react'
-import WestCoastLogo from '@/components/west-coast-logo'
+import Image from 'next/image'
 
 const navLinks = [
   { label: 'Home', href: '/#home' },
@@ -75,8 +75,22 @@ export default function Navbar() {
 
           {/* Logo */}
           <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
-            <WestCoastLogo height={44} variant="light" showByline={false} className="hidden md:block" />
-            <WestCoastLogo height={36} variant="light" showByline={false} className="md:hidden" />
+            <Image
+              src="/wcm-logo.jpg"
+              alt="West Coast Mediators"
+              width={220}
+              height={60}
+              className="h-11 w-auto hidden md:block brightness-0 invert"
+              priority
+            />
+            <Image
+              src="/wcm-logo.jpg"
+              alt="West Coast Mediators"
+              width={180}
+              height={49}
+              className="h-9 w-auto md:hidden brightness-0 invert"
+              priority
+            />
           </a>
 
           {/* Desktop nav */}

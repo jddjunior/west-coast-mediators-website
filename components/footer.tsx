@@ -1,5 +1,5 @@
 import { Phone, Mail, MapPin, Globe } from 'lucide-react'
-import WestCoastLogo from '@/components/west-coast-logo'
+import Image from 'next/image'
 
 const navLinks = [
   { label: 'Home', href: '/#home' },
