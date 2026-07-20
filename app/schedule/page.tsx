@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Phone, Mail } from 'lucide-react'
-import WestCoastLogo from '@/components/west-coast-logo'
+
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -58,9 +58,23 @@ export default function ScheduleHubPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
-          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
-            <WestCoastLogo height={44} variant="light" showByline={false} className="hidden md:block" />
-            <WestCoastLogo height={36} variant="light" showByline={false} className="md:hidden" />
+          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0 bg-[#F2F2F0] px-3 py-1.5">
+            <Image
+              src="/wcm-logo.png"
+              alt="West Coast Mediators"
+              width={200}
+              height={57}
+              className="h-10 w-auto hidden md:block"
+              priority
+            />
+            <Image
+              src="/wcm-logo.png"
+              alt="West Coast Mediators"
+              width={160}
+              height={46}
+              className="h-8 w-auto md:hidden"
+              priority
+            />
           </a>
           <a
             href="/"

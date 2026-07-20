@@ -74,21 +74,21 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
 
           {/* Logo */}
-          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
+          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0 bg-[#F2F2F0] px-3 py-1.5">
             <Image
-              src="/wcm-logo.jpg"
+              src="/wcm-logo.png"
               alt="West Coast Mediators"
               width={220}
-              height={60}
-              className="h-11 w-auto hidden md:block brightness-0 invert"
+              height={63}
+              className="h-10 w-auto hidden md:block"
               priority
             />
             <Image
-              src="/wcm-logo.jpg"
+              src="/wcm-logo.png"
               alt="West Coast Mediators"
               width={180}
-              height={49}
-              className="h-9 w-auto md:hidden brightness-0 invert"
+              height={51}
+              className="h-8 w-auto md:hidden"
               priority
             />
           </a>
