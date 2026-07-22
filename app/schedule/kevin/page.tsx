@@ -13,12 +13,16 @@ const kevin = {
   title: 'Esq.',
   subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
   location: 'Tampa, Florida',
-  phone: '(941) 792-1695',
-  email: 'scheduling@westcoastmediators.com',
+  address: '110 N 11th St, Suite 201, Tampa, FL 33602',
+  phone: '(813) 222-3620',
+  email: 'kevin@gulfcoastmediation.com',
+  receptionistLabel: 'Gulf Coast Mediation Scheduling',
   photo: '/kevin-woods.jpg',
   bio: 'Kevin B. Woods is a Board-Certified civil trial attorney and Florida Supreme Court Certified Mediator with 29+ years of experience on both Plaintiff and Defense sides. His hands-on trial background across Personal Injury, Products Liability, Trucking, Brain Injury, Medical Malpractice, and Business Litigation gives him unique insight as a neutral.',
   calendarNote:
-    'This calendar will connect to our PHP-based scheduling system. When live, attorneys and parties will be able to view Kevin\'s real-time availability, request session dates, and receive automated confirmation emails directly from this page.',
+    'Use the form below or call Kevin\'s Tampa office directly to schedule. Live calendar availability will be integrated here via our PHP scheduling system.',
+  firmPhone: '(941) 792-1695',
+  firmEmail: 'scheduling@westcoastmediators.com',
 }
 
 export default function KevinSchedulePage() {

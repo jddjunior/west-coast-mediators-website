@@ -1,9 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Phone, Mail, MapPin, ArrowLeft, Clock, CalendarDays, Info } from 'lucide-react'
-
+import { Phone, Mail, MapPin, ArrowLeft, Clock, CalendarDays, Info, User, ChevronDown, Send, CheckCircle } from 'lucide-react'
 
 interface SchedulingPageProps {
   attorney: {
@@ -12,38 +12,74 @@ interface SchedulingPageProps {
     title: string
     subtitle: string
     location: string
+    address: string
     phone: string
     email: string
+    receptionistLabel: string   // e.g. "Scheduling Office" or "Gulf Coast Mediation"
     photo: string
     bio: string
     calendarNote: string
+    firmPhone: string           // West Coast Mediators main line
+    firmEmail: string           // scheduling@westcoastmediators.com
   }
 }
 
+const matterTypes = [
+  'Personal Injury',
+  'Medical / Legal Malpractice',
+  'Insurance Dispute',
+  'Business / Commercial',
+  'Real Property',
+  'Construction',
+  'Contract Dispute',
+  'Other',
+]
+
 export default function SchedulingPage({ attorney }: SchedulingPageProps) {
+  const [formState, setFormState] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    matter: '',
+    message: '',
+  })
+  const [submitted, setSubmitted] = useState(false)
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    // Placeholder — will be wired to PHP mailer
+    setSubmitted(true)
+  }
+
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
-      {/* Top nav bar */}
-      <header className="bg-[#0A1B2E] sticky top-0 z-50 shadow-lg shadow-black/20">
-        <div className="bg-[#23423D] py-2 px-4 hidden md:block">
-          <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
-            <a
-              href={`tel:${attorney.phone.replace(/\D/g, '')}`}
-              className="flex items-center gap-2 text-[#B99B5A] text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#F2F2F0] transition-colors"
-            >
-              <Phone size={13} />
-              {attorney.phone}
-            </a>
-            <a
-              href={`mailto:${attorney.email}`}
-              className="text-[#F2F2F0]/80 text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#B99B5A] transition-colors"
-            >
-              {attorney.email}
-            </a>
-          </div>
+
+      {/* Top bar */}
+      <div className="bg-[#23423D] py-2 px-4 hidden md:block">
+        <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
+          <a
+            href={`tel:${attorney.firmPhone.replace(/\D/g, '')}`}
+            className="flex items-center gap-2 text-[#B99B5A] text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#F2F2F0] transition-colors"
+          >
+            <Phone size={13} />
+            {attorney.firmPhone}
+          </a>
+          <a
+            href={`mailto:${attorney.firmEmail}`}
+            className="text-[#F2F2F0]/80 text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#B99B5A] transition-colors"
+          >
+            {attorney.firmEmail}
+          </a>
         </div>
+      </div>
+
+      {/* Sticky nav */}
+      <header className="bg-[#0A1B2E] sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 md:h-24 flex items-center justify-between">
-          {/* Logo */}
           <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
             <Image
               src="/wcm-logo-white.jpg"
@@ -72,11 +108,10 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
         </div>
       </header>
 
-      {/* Page hero strip */}
+      {/* Page hero */}
       <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
-            {/* Headshot */}
             <div className="relative w-24 h-28 md:w-32 md:h-36 flex-shrink-0 border-2 border-[#B99B5A] overflow-hidden">
               <Image
                 src={attorney.photo}
@@ -99,7 +134,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
               <div className="flex items-center gap-2 mt-2">
                 <MapPin size={13} className="text-[#B99B5A]" />
                 <span className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/50 text-xs tracking-wide">
-                  {attorney.location}
+                  {attorney.address}
                 </span>
               </div>
             </div>
@@ -111,161 +146,337 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
 
-          {/* LEFT: Calendar area */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Calendar heading */}
-            <div className="flex items-center gap-3 mb-2">
-              <CalendarDays size={22} className="text-[#23423D]" strokeWidth={1.5} />
-              <h2 className="font-[family-name:var(--font-display)] text-[#0A1B2E] text-xl md:text-2xl font-bold">
-                Select a Date &amp; Time
-              </h2>
-            </div>
+          {/* ── LEFT: Calendar + Inquiry Form ─────────────────────── */}
+          <div className="lg:col-span-2 space-y-10">
 
-            {/* PHP calendar placeholder */}
-            <div className="relative border-2 border-dashed border-[#B99B5A]/40 bg-white overflow-hidden group">
-              {/* Placeholder image */}
-              <Image
-                src="/calendar-placeholder.png"
-                alt="Calendar — scheduling integration coming soon"
-                width={900}
-                height={506}
-                className="w-full h-auto opacity-70"
-                priority
-              />
+            {/* Calendar */}
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <CalendarDays size={22} className="text-[#23423D]" strokeWidth={1.5} />
+                <h2 className="font-[family-name:var(--font-display)] text-[#0A1B2E] text-xl md:text-2xl font-bold">
+                  Select a Date &amp; Time
+                </h2>
+              </div>
 
-              {/* Overlay with integration message */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A1B2E]/60 backdrop-blur-[2px]">
-                <div className="text-center px-6 max-w-sm">
-                  <div className="w-14 h-14 border-2 border-[#B99B5A] flex items-center justify-center mx-auto mb-4">
-                    <CalendarDays size={24} className="text-[#B99B5A]" strokeWidth={1.5} />
-                  </div>
-                  <p className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-xl font-bold mb-2">
-                    Online Scheduling
-                  </p>
-                  <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/70 text-sm leading-relaxed mb-5">
-                    Our interactive calendar will be available here shortly. In the meantime, please
-                    contact us directly to schedule your mediation session.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a
-                      href={`tel:${attorney.phone.replace(/\D/g, '')}`}
-                      className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#c9ab6a] transition-colors"
-                    >
-                      <Phone size={14} />
-                      Call Now
-                    </a>
-                    <a
-                      href={`mailto:${attorney.email}`}
-                      className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[#B99B5A] text-[#B99B5A] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#B99B5A]/10 transition-colors"
-                    >
-                      <Mail size={14} />
-                      Send Email
-                    </a>
+              {/* PHP calendar placeholder */}
+              <div className="relative border-2 border-dashed border-[#B99B5A]/40 bg-white overflow-hidden">
+                <Image
+                  src="/calendar-placeholder.png"
+                  alt="Calendar — scheduling integration coming soon"
+                  width={900}
+                  height={506}
+                  className="w-full h-auto opacity-60"
+                  priority
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A1B2E]/65 backdrop-blur-[2px]">
+                  <div className="text-center px-6 max-w-sm">
+                    <div className="w-14 h-14 border-2 border-[#B99B5A] flex items-center justify-center mx-auto mb-4">
+                      <CalendarDays size={24} className="text-[#B99B5A]" strokeWidth={1.5} />
+                    </div>
+                    <p className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-xl font-bold mb-2">
+                      Online Scheduling Coming Soon
+                    </p>
+                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/70 text-sm leading-relaxed">
+                      {attorney.calendarNote}
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* PHP integration note */}
-            <div className="flex items-start gap-3 bg-[#23423D]/8 border border-[#23423D]/20 px-5 py-4">
-              <Info size={16} className="text-[#23423D] mt-0.5 flex-shrink-0" strokeWidth={1.5} />
-              <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
-                <span className="font-semibold text-[#23423D]">PHP Calendar Integration:</span>{' '}
-                {attorney.calendarNote}
-              </p>
-            </div>
-
-            {/* Session info cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="bg-white border border-[#d5d3d0] p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock size={16} className="text-[#B99B5A]" strokeWidth={1.5} />
-                  <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold tracking-wide uppercase">
-                    Session Duration
-                  </h3>
-                </div>
+              <div className="flex items-start gap-3 bg-white border border-[#d5d3d0] px-5 py-4 mt-4">
+                <Info size={15} className="text-[#23423D] mt-0.5 flex-shrink-0" strokeWidth={1.5} />
                 <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
-                  Half-day (4 hrs) and full-day (8 hrs) sessions available. Complex multi-party
-                  matters may require extended scheduling.
+                  <span className="font-semibold text-[#23423D]">PHP Calendar Integration — </span>
+                  This calendar will connect to a live scheduling system. Parties will be able to
+                  view real-time availability, request session dates, and receive automated
+                  confirmations directly from this page.
                 </p>
               </div>
-              <div className="bg-white border border-[#d5d3d0] p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin size={16} className="text-[#B99B5A]" strokeWidth={1.5} />
-                  <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold tracking-wide uppercase">
-                    Location
-                  </h3>
+
+              {/* Session info */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <div className="bg-white border border-[#d5d3d0] p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Clock size={16} className="text-[#B99B5A]" strokeWidth={1.5} />
+                    <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs font-semibold tracking-[0.2em] uppercase">
+                      Session Duration
+                    </h3>
+                  </div>
+                  <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
+                    Half-day (4 hrs) and full-day (8 hrs) sessions available. Complex multi-party
+                    matters may require extended scheduling.
+                  </p>
                 </div>
-                <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
-                  Sessions held at counsel&apos;s office or a neutral conference facility.
-                  Virtual mediation via Zoom is also available upon request.
-                </p>
+                <div className="bg-white border border-[#d5d3d0] p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <MapPin size={16} className="text-[#B99B5A]" strokeWidth={1.5} />
+                    <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs font-semibold tracking-[0.2em] uppercase">
+                      Location
+                    </h3>
+                  </div>
+                  <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
+                    Sessions held at counsel&apos;s office or a neutral conference facility.
+                    Virtual mediation via Zoom is available upon request.
+                  </p>
+                </div>
               </div>
+            </div>
+
+            {/* ── Inquiry Form ───────────────────────────────────── */}
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <Send size={20} className="text-[#23423D]" strokeWidth={1.5} />
+                <h2 className="font-[family-name:var(--font-display)] text-[#0A1B2E] text-xl md:text-2xl font-bold">
+                  Send a Scheduling Request
+                </h2>
+              </div>
+
+              {submitted ? (
+                <div className="bg-white border border-[#23423D]/30 p-10 flex flex-col items-center text-center gap-4">
+                  <div className="w-16 h-16 bg-[#23423D]/10 flex items-center justify-center">
+                    <CheckCircle size={32} className="text-[#23423D]" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="font-[family-name:var(--font-display)] text-[#0A1B2E] text-2xl font-bold">
+                    Request Received
+                  </h3>
+                  <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed max-w-sm">
+                    Thank you for reaching out. {attorney.receptionistLabel} will be in touch within
+                    one business day to confirm availability and finalize your session.
+                  </p>
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="mt-2 font-[family-name:var(--font-sub)] text-[#23423D] text-sm tracking-wide underline underline-offset-4 hover:text-[#B99B5A] transition-colors"
+                  >
+                    Submit another request
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="bg-white border border-[#d5d3d0] p-7 md:p-9 space-y-6">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Name */}
+                    <div>
+                      <label className="block font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                        Full Name <span className="text-[#B99B5A]">*</span>
+                      </label>
+                      <div className="relative">
+                        <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A7A9AC]" />
+                        <input
+                          type="text"
+                          name="name"
+                          required
+                          value={formState.name}
+                          onChange={handleChange}
+                          placeholder="Your full name"
+                          className="w-full pl-9 pr-4 py-3 border border-[#d5d3d0] bg-[#F2F2F0] font-[family-name:var(--font-sans)] text-[#0A1B2E] text-sm placeholder:text-[#A7A9AC] focus:outline-none focus:border-[#23423D] transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                        Phone Number <span className="text-[#B99B5A]">*</span>
+                      </label>
+                      <div className="relative">
+                        <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A7A9AC]" />
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          value={formState.phone}
+                          onChange={handleChange}
+                          placeholder="(000) 000-0000"
+                          className="w-full pl-9 pr-4 py-3 border border-[#d5d3d0] bg-[#F2F2F0] font-[family-name:var(--font-sans)] text-[#0A1B2E] text-sm placeholder:text-[#A7A9AC] focus:outline-none focus:border-[#23423D] transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="block font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                      Email Address <span className="text-[#B99B5A]">*</span>
+                    </label>
+                    <div className="relative">
+                      <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A7A9AC]" />
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        value={formState.email}
+                        onChange={handleChange}
+                        placeholder="your@email.com"
+                        className="w-full pl-9 pr-4 py-3 border border-[#d5d3d0] bg-[#F2F2F0] font-[family-name:var(--font-sans)] text-[#0A1B2E] text-sm placeholder:text-[#A7A9AC] focus:outline-none focus:border-[#23423D] transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Matter type */}
+                  <div>
+                    <label className="block font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                      Type of Matter <span className="text-[#B99B5A]">*</span>
+                    </label>
+                    <div className="relative">
+                      <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A7A9AC] pointer-events-none" />
+                      <select
+                        name="matter"
+                        required
+                        value={formState.matter}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-[#d5d3d0] bg-[#F2F2F0] font-[family-name:var(--font-sans)] text-sm text-[#0A1B2E] appearance-none focus:outline-none focus:border-[#23423D] transition-colors"
+                      >
+                        <option value="" disabled>Select a matter type</option>
+                        {matterTypes.map((m) => (
+                          <option key={m} value={m}>{m}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label className="block font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                      Additional Details
+                    </label>
+                    <textarea
+                      name="message"
+                      rows={5}
+                      value={formState.message}
+                      onChange={handleChange}
+                      placeholder="Briefly describe the matter, preferred dates, number of parties, or any special requirements..."
+                      className="w-full px-4 py-3 border border-[#d5d3d0] bg-[#F2F2F0] font-[family-name:var(--font-sans)] text-[#0A1B2E] text-sm placeholder:text-[#A7A9AC] focus:outline-none focus:border-[#23423D] transition-colors resize-none"
+                    />
+                  </div>
+
+                  {/* Disclaimer */}
+                  <p className="font-[family-name:var(--font-sans)] text-[#A7A9AC] text-xs leading-relaxed">
+                    This form routes directly to {attorney.receptionistLabel}. Submissions are
+                    reviewed within one business day. For urgent matters, please call{' '}
+                    <a href={`tel:${attorney.phone.replace(/\D/g, '')}`} className="text-[#23423D] hover:underline">
+                      {attorney.phone}
+                    </a>{' '}
+                    directly.
+                  </p>
+
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-4 bg-[#23423D] text-[#F2F2F0] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-[0.15em] uppercase hover:bg-[#0A1B2E] transition-colors duration-200"
+                  >
+                    <Send size={15} />
+                    Send Request to {attorney.name.split(' ')[0]}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
 
-          {/* RIGHT: Contact sidebar */}
+          {/* ── RIGHT: Sidebar ─────────────────────────────────────── */}
           <div className="lg:col-span-1 space-y-6">
-            {/* About this mediator */}
-            <div className="bg-[#23423D] text-[#F2F2F0] p-7">
-              <h3 className="font-[family-name:var(--font-display)] text-lg font-bold mb-1">
-                About {attorney.name.split(' ')[0]}
-              </h3>
-              <div className="h-px bg-[#B99B5A]/40 mb-4" />
-              <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/75 text-sm leading-relaxed">
-                {attorney.bio}
-              </p>
-            </div>
 
-            {/* Direct contact */}
-            <div className="bg-white border border-[#d5d3d0] p-7">
-              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.25em] uppercase font-semibold mb-5">
-                Schedule by Phone or Email
+            {/* Attorney direct line */}
+            <div className="bg-[#23423D] text-[#F2F2F0] p-7">
+              <p className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.25em] uppercase mb-1">
+                {attorney.receptionistLabel}
+              </p>
+              <h3 className="font-[family-name:var(--font-display)] text-lg font-bold mb-1">
+                {attorney.name.split(' ')[0]}&apos;s Scheduling Line
               </h3>
+              <div className="h-px bg-[#B99B5A]/30 my-4" />
               <div className="space-y-4">
                 <a
                   href={`tel:${attorney.phone.replace(/\D/g, '')}`}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-9 h-9 bg-[#B99B5A]/15 flex items-center justify-center flex-shrink-0 group-hover:bg-[#B99B5A] transition-colors">
-                    <Phone size={15} className="text-[#B99B5A] group-hover:text-[#0A1B2E] transition-colors" />
+                  <div className="w-9 h-9 border border-[#B99B5A]/40 flex items-center justify-center flex-shrink-0 group-hover:bg-[#B99B5A]/20 transition-colors">
+                    <Phone size={15} className="text-[#B99B5A]" />
                   </div>
                   <div>
-                    <p className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold group-hover:text-[#23423D] transition-colors">
+                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0] text-sm font-semibold group-hover:text-[#B99B5A] transition-colors">
                       {attorney.phone}
                     </p>
-                    <p className="font-[family-name:var(--font-sans)] text-[#A7A9AC] text-xs">
-                      Mon – Fri, 9am – 5pm ET
+                    <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/45 text-xs">
+                      Direct scheduling line
                     </p>
                   </div>
                 </a>
-                <div className="h-px bg-[#d5d3d0]" />
                 <a
                   href={`mailto:${attorney.email}`}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-9 h-9 bg-[#B99B5A]/15 flex items-center justify-center flex-shrink-0 group-hover:bg-[#B99B5A] transition-colors">
-                    <Mail size={15} className="text-[#B99B5A] group-hover:text-[#0A1B2E] transition-colors" />
+                  <div className="w-9 h-9 border border-[#B99B5A]/40 flex items-center justify-center flex-shrink-0 group-hover:bg-[#B99B5A]/20 transition-colors">
+                    <Mail size={15} className="text-[#B99B5A]" />
                   </div>
                   <div>
-                    <p className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold group-hover:text-[#23423D] transition-colors break-all">
+                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0] text-sm font-semibold group-hover:text-[#B99B5A] transition-colors break-all">
                       {attorney.email}
                     </p>
-                    <p className="font-[family-name:var(--font-sans)] text-[#A7A9AC] text-xs">
-                      Typically responds within 24 hrs
+                    <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/45 text-xs">
+                      Scheduling email
                     </p>
                   </div>
+                </a>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 border border-[#B99B5A]/40 flex items-center justify-center flex-shrink-0">
+                    <MapPin size={15} className="text-[#B99B5A]" />
+                  </div>
+                  <div>
+                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0] text-sm font-semibold">
+                      {attorney.location}
+                    </p>
+                    <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/45 text-xs leading-relaxed mt-0.5">
+                      {attorney.address}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* About */}
+            <div className="bg-white border border-[#d5d3d0] p-7">
+              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.25em] uppercase font-semibold mb-4">
+                About {attorney.name.split(' ')[0]}
+              </h3>
+              <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
+                {attorney.bio}
+              </p>
+            </div>
+
+            {/* Firm contact */}
+            <div className="bg-[#F2F2F0] border border-[#d5d3d0] p-7">
+              <p className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.25em] uppercase mb-1">
+                West Coast Mediators
+              </p>
+              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold mb-4">
+                General Firm Inquiries
+              </h3>
+              <div className="space-y-3">
+                <a
+                  href={`tel:${attorney.firmPhone.replace(/\D/g, '')}`}
+                  className="flex items-center gap-2 text-[#23423D] hover:text-[#B99B5A] transition-colors font-[family-name:var(--font-sub)] text-sm"
+                >
+                  <Phone size={13} />
+                  {attorney.firmPhone}
+                </a>
+                <a
+                  href={`mailto:${attorney.firmEmail}`}
+                  className="flex items-center gap-2 text-[#23423D] hover:text-[#B99B5A] transition-colors font-[family-name:var(--font-sub)] text-sm break-all"
+                >
+                  <Mail size={13} />
+                  {attorney.firmEmail}
                 </a>
               </div>
             </div>
 
-            {/* Other mediator CTA */}
-            <div className="bg-[#F2F2F0] border border-[#d5d3d0] p-7">
+            {/* Other mediator */}
+            <div className="border border-[#d5d3d0] bg-white p-7">
               <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.25em] uppercase font-semibold mb-3">
                 Also Available
               </h3>
               <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed mb-4">
-                Both of our certified mediators maintain flexible availability across Southwest Florida.
+                Both of our certified mediators serve Southwest Florida and are available for
+                half-day and full-day sessions.
               </p>
               <Link
                 href="/schedule"
@@ -276,10 +487,11 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
               </Link>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Footer strip */}
+      {/* Footer */}
       <div className="bg-[#0A1B2E] border-t border-[#B99B5A]/20 mt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/35 text-xs text-center">
@@ -293,6 +505,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
           </Link>
         </div>
       </div>
+
     </div>
   )
 }
