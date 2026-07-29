@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, Mail, MapPin, ArrowLeft, Clock, CalendarDays, Info, User, ChevronDown, Send, CheckCircle } from 'lucide-react'
+import MediationCalendar from '@/components/mediation-calendar'
 
 interface SchedulingPageProps {
   attorney: {
@@ -158,40 +159,10 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
                 </h2>
               </div>
 
-              {/* PHP calendar placeholder */}
-              <div className="relative border-2 border-dashed border-[#B99B5A]/40 bg-white overflow-hidden">
-                <Image
-                  src="/calendar-placeholder.png"
-                  alt="Calendar — scheduling integration coming soon"
-                  width={900}
-                  height={506}
-                  className="w-full h-auto opacity-60"
-                  priority
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A1B2E]/65 backdrop-blur-[2px]">
-                  <div className="text-center px-6 max-w-sm">
-                    <div className="w-14 h-14 border-2 border-[#B99B5A] flex items-center justify-center mx-auto mb-4">
-                      <CalendarDays size={24} className="text-[#B99B5A]" strokeWidth={1.5} />
-                    </div>
-                    <p className="font-[family-name:var(--font-display)] text-[#F2F2F0] text-xl font-bold mb-2">
-                      Online Scheduling Coming Soon
-                    </p>
-                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/70 text-sm leading-relaxed">
-                      {attorney.calendarNote}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 bg-white border border-[#d5d3d0] px-5 py-4 mt-4">
-                <Info size={15} className="text-[#23423D] mt-0.5 flex-shrink-0" strokeWidth={1.5} />
-                <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
-                  <span className="font-semibold text-[#23423D]">PHP Calendar Integration — </span>
-                  This calendar will connect to a live scheduling system. Parties will be able to
-                  view real-time availability, request session dates, and receive automated
-                  confirmations directly from this page.
-                </p>
-              </div>
+              <MediationCalendar
+                attorneyId={attorney.id}
+                attorneyName={attorney.name.split(',')[0]}
+              />
 
               {/* Session info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
