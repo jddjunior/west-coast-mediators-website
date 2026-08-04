@@ -20,7 +20,7 @@ const stephen = {
   photo: '/stephen-brannan-crop.jpg',
   bio: 'Stephen G. Brannan is a certified Federal and State Circuit Court mediator with decades of civil litigation experience. He has mediated thousands of cases across Personal Injury, Medical Malpractice, Business, Real Property, Construction, and Contract disputes throughout Southwest Florida.',
   calendarNote:
-    'Use the form below or call directly to schedule with Stephen. Live calendar availability will be integrated here via our PHP scheduling system.',
+    'Review Stephen\'s live calendar below, then send a scheduling request or call directly to confirm your mediation session.',
   firmPhone: '(941) 792-1695',
   firmEmail: 'schedule-sb@westcoastmediators.com',
 }
