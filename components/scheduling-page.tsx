@@ -132,12 +132,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
               <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/60 text-sm tracking-wide mt-1">
                 {attorney.subtitle}
               </p>
-              <div className="flex items-center gap-2 mt-2">
-                <MapPin size={13} className="text-[#B99B5A]" />
-                <span className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/50 text-xs tracking-wide">
-                  {attorney.address}
-                </span>
-              </div>
+
             </div>
           </div>
         </div>
@@ -388,19 +383,6 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
                     </p>
                   </div>
                 </a>
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 border border-[#B99B5A]/40 flex items-center justify-center flex-shrink-0">
-                    <MapPin size={15} className="text-[#B99B5A]" />
-                  </div>
-                  <div>
-                    <p className="font-[family-name:var(--font-sub)] text-[#F2F2F0] text-sm font-semibold">
-                      {attorney.location}
-                    </p>
-                    <p className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/45 text-xs leading-relaxed mt-0.5">
-                      {attorney.address}
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -440,23 +422,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
               </div>
             </div>
 
-            {/* Other mediator */}
-            <div className="border border-[#d5d3d0] bg-white p-7">
-              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.25em] uppercase font-semibold mb-3">
-                Also Available
-              </h3>
-              <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed mb-4">
-                Both of our certified mediators serve Southwest Florida and are available for
-                half-day and full-day sessions.
-              </p>
-              <Link
-                href="/schedule"
-                className="inline-flex items-center gap-2 text-[#23423D] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wide hover:text-[#B99B5A] transition-colors border-b border-[#23423D]/30 hover:border-[#B99B5A] pb-0.5"
-              >
-                View All Mediators
-                <ArrowLeft size={13} className="rotate-180" />
-              </Link>
-            </div>
+
           </div>
 
         </div>
