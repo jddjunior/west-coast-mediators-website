@@ -1,0 +1,20 @@
+{
+  "buildCommand": null,
+  "outputDirectory": "html-export",
+  "framework": null,
+  "rewrites": [
+    { "source": "/schedule/stephen", "destination": "/schedule/stephen/index.html" },
+    { "source": "/schedule/kevin", "destination": "/schedule/kevin/index.html" },
+    { "source": "/schedule", "destination": "/schedule/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000" }
+      ]
+    }
+  ]
+}
