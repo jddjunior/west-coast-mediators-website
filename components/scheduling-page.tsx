@@ -18,7 +18,8 @@ interface SchedulingPageProps {
     email: string
     receptionistLabel: string   // e.g. "Scheduling Office" or "Gulf Coast Mediation"
     photo: string
-    bio: string
+    bio: string | string[]
+    credentials?: string[]
     calendarNote: string
     firmPhone: string           // West Coast Mediators main line
     firmEmail: string           // scheduling@westcoastmediators.com
@@ -386,14 +387,38 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
               </div>
             </div>
 
-            {/* About */}
-            <div className="bg-white border border-[#d5d3d0] p-7">
-              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.25em] uppercase font-semibold mb-4">
-                About {attorney.name.split(' ')[0]}
-              </h3>
-              <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
-                {attorney.bio}
+            {/* Full Bio & CV */}
+            <div id="bio" className="bg-white border border-[#d5d3d0] p-7">
+              <p className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.25em] uppercase mb-1">
+                Full Bio &amp; CV
               </p>
+              <h3 className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-sm font-semibold mb-5">
+                About {attorney.name.split(',')[0]}
+              </h3>
+              <div className="space-y-4 mb-6">
+                {(Array.isArray(attorney.bio) ? attorney.bio : [attorney.bio]).map((para, i) => (
+                  <p key={i} className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
+                    {para}
+                  </p>
+                ))}
+              </div>
+              {attorney.credentials && attorney.credentials.length > 0 && (
+                <div className="border-t border-[#d5d3d0] pt-5">
+                  <p className="font-[family-name:var(--font-sub)] text-[#0A1B2E] text-xs tracking-[0.2em] uppercase font-semibold mb-3">
+                    Credentials &amp; Qualifications
+                  </p>
+                  <ul className="space-y-2">
+                    {attorney.credentials.map((cred) => (
+                      <li key={cred} className="flex items-start gap-2.5">
+                        <CheckCircle size={14} className="text-[#23423D] mt-0.5 flex-shrink-0" strokeWidth={2} />
+                        <span className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed">
+                          {cred}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Firm contact */}

@@ -18,7 +18,19 @@ const stephen = {
   email: 'schedule-sb@westcoastmediators.com',
   receptionistLabel: 'West Coast Mediators Scheduling Office',
   photo: '/stephen-brannan-crop.jpg',
-  bio: 'Stephen G. Brannan is a certified Federal and State Circuit Court mediator with decades of civil litigation experience. He has mediated thousands of cases across Personal Injury, Medical Malpractice, Business, Real Property, Construction, and Contract disputes throughout Southwest Florida.',
+  bio: [
+    'Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.',
+    'His experience spans every major category of civil litigation — from personal injury and medical malpractice to complex commercial and real property disputes. Attorneys and insurance professionals across Southwest Florida trust his process to deliver results.',
+    'Stephen is certified by the Florida Supreme Court as a Circuit Court Mediator and by the United States District Court as a Federal Mediator. He is a longstanding member of the Florida Bar and has mediated thousands of civil cases to successful resolution throughout Sarasota, Manatee, Charlotte, and surrounding counties.',
+  ],
+  credentials: [
+    'Certified Florida Supreme Court Circuit Court Mediator',
+    'Certified Federal District Court Mediator',
+    'Member of the Florida Bar',
+    'Mediated thousands of civil cases to successful resolution',
+    'Extensive experience in complex, multi-party disputes',
+    'Serving Sarasota, Manatee, Charlotte and surrounding counties',
+  ],
   calendarNote:
     'Use the form below or call directly to schedule with Stephen. Live calendar availability will be integrated here via our PHP scheduling system.',
   firmPhone: '(941) 792-1695',
