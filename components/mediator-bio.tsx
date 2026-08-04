@@ -11,7 +11,7 @@ type BioSection = {
   items: string[]
 }
 
-type Attorney = {
+export type Attorney = {
   id: string
   name: string
   title: string
@@ -22,7 +22,7 @@ type Attorney = {
   sections: BioSection[]
 }
 
-const attorneys: Attorney[] = [
+export const attorneys: Attorney[] = [
   {
     id: 'stephen',
     name: 'Stephen G. Brannan',
@@ -152,7 +152,7 @@ const attorneys: Attorney[] = [
   },
 ]
 
-function AttorneyAccordion({ attorney }: { attorney: Attorney }) {
+export function AttorneyAccordion({ attorney }: { attorney: Attorney }) {
   const [openSection, setOpenSection] = useState<string | null>(null)
 
   return (
@@ -240,15 +240,21 @@ function AttorneyCard({ attorney }: { attorney: Attorney }) {
           <p key={para} className="mb-4 font-[family-name:var(--font-sans)] text-base leading-relaxed text-[#5A6B66]">{para}</p>
         ))}
 
-        <AttorneyAccordion attorney={attorney} />
-
-        <Link
-          href={`/schedule/${attorney.id}`}
-          className="group mt-6 flex w-full items-center justify-center gap-2 bg-[#23423D] px-6 py-4 font-[family-name:var(--font-sub)] text-sm font-semibold uppercase tracking-[0.15em] text-[#F2F2F0] transition-colors duration-200 hover:bg-[#0A1B2E]"
-        >
-          <CalendarDays size={16} className="text-[#B99B5A]" strokeWidth={1.5} aria-hidden="true" />
-          Schedule with {attorney.name.split(' ')[0]}
-        </Link>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href={attorney.id === 'stephen' ? '/steve-brannan.html' : '/kevin-woods.html'}
+            className="flex flex-1 items-center justify-center border border-[#23423D] px-5 py-4 font-[family-name:var(--font-sub)] text-xs font-semibold uppercase tracking-[0.14em] text-[#23423D] transition-colors duration-200 hover:bg-[#23423D] hover:text-[#F2F2F0]"
+          >
+            Full CV &amp; Bio
+          </Link>
+          <Link
+            href={`/schedule/${attorney.id}`}
+            className="group flex flex-1 items-center justify-center gap-2 bg-[#23423D] px-5 py-4 font-[family-name:var(--font-sub)] text-xs font-semibold uppercase tracking-[0.12em] text-[#F2F2F0] transition-colors duration-200 hover:bg-[#0A1B2E]"
+          >
+            <CalendarDays size={16} className="text-[#B99B5A]" strokeWidth={1.5} aria-hidden="true" />
+            Schedule with {attorney.name.split(' ')[0]}
+          </Link>
+        </div>
       </div>
     </div>
   )
