@@ -15,14 +15,14 @@ const stephen = {
   location: 'Sarasota, Florida',
   address: 'Sarasota, Florida',
   phone: '(941) 792-1695',
-  email: 'scheduling@westcoastmediators.com',
+  email: 'schedule-sb@westcoastmediators.com',
   receptionistLabel: 'West Coast Mediators Scheduling Office',
   photo: '/stephen-brannan-crop.jpg',
   bio: 'Stephen G. Brannan is a certified Federal and State Circuit Court mediator with decades of civil litigation experience. He has mediated thousands of cases across Personal Injury, Medical Malpractice, Business, Real Property, Construction, and Contract disputes throughout Southwest Florida.',
   calendarNote:
     'Use the form below or call directly to schedule with Stephen. Live calendar availability will be integrated here via our PHP scheduling system.',
   firmPhone: '(941) 792-1695',
-  firmEmail: 'scheduling@westcoastmediators.com',
+  firmEmail: 'schedule-sb@westcoastmediators.com',
 }
 
 export default function StephenSchedulePage() {
