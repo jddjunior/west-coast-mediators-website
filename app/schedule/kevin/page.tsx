@@ -20,7 +20,7 @@ const kevin = {
   photo: '/kevin-woods.jpg',
   bio: 'Kevin B. Woods is a Board-Certified civil trial attorney and Florida Supreme Court Certified Mediator with 29+ years of experience on both Plaintiff and Defense sides. His hands-on trial background across Personal Injury, Products Liability, Trucking, Brain Injury, Medical Malpractice, and Business Litigation gives him unique insight as a neutral.',
   calendarNote:
-    'Use the form below or call Kevin\'s Tampa office directly to schedule. Live calendar availability will be integrated here via our PHP scheduling system.',
+    'Review Kevin\'s live calendar below, then send a scheduling request or call his Tampa office directly to confirm availability.',
   firmPhone: '(941) 792-1695',
   firmEmail: 'schedule-kw@westcoastmediators.com',
 }

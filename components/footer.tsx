@@ -128,7 +128,7 @@ export default function Footer() {
               ].map((area) => (
                 <li key={area}>
                   <a
-                    href="#practice-areas"
+                    href="/#practice-areas"
                     className="font-[family-name:var(--font-sans)] text-[#F2F2F0]/60 text-sm hover:text-[#B99B5A] transition-colors"
                   >
                     {area}
