@@ -1,12 +1,6 @@
 {
-  "buildCommand": null,
-  "outputDirectory": "html-export",
-  "framework": null,
-  "rewrites": [
-    { "source": "/schedule/stephen", "destination": "/schedule/stephen/index.html" },
-    { "source": "/schedule/kevin", "destination": "/schedule/kevin/index.html" },
-    { "source": "/schedule", "destination": "/schedule/index.html" }
-  ],
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
   "headers": [
     {
       "source": "/(.*)",
