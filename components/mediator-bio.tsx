@@ -225,9 +225,6 @@ function AttorneyCard({ attorney }: { attorney: Attorney }) {
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#B99B5A]" />
-        <div className="absolute right-4 top-4 bg-[#0A1B2E]/80 px-3 py-1 backdrop-blur-sm">
-          <span className="font-[family-name:var(--font-sub)] text-xs uppercase tracking-widest text-[#B99B5A]">{attorney.location}</span>
-        </div>
       </div>
 
       <div className="p-8">
