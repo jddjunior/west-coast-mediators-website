@@ -3,11 +3,11 @@ import * as cheerio from 'cheerio'
 
 // Map attorney IDs to their respective PHP WebCalendar URLs
 const CALENDAR_URLS: Record<string, string[]> = {
-  stephen: ['https://www.westcoastmediators.com/webcalendar_joe/month.php'],
+  stephen: ['https://www.westcoastmediators.com/webcalendar_joe/'],
   // Keep the dedicated Kevin calendar first, with the active public calendar as a safe fallback.
   kevin: [
-    'https://www.westcoastmediators.com/webcalendar_kevin/month.php',
-    'https://www.westcoastmediators.com/webcalendar_joe/month.php',
+    'https://www.westcoastmediators.com/webcalendar_kevin/',
+    'https://www.westcoastmediators.com/webcalendar_joe/',
   ],
 }
 
