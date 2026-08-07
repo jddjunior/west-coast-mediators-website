@@ -578,6 +578,16 @@ ul, ol { list-style: none; }
 }
 .contact-cta-box .btn-border:hover { background: rgba(10,27,46,.1); }
 
+/* Schedule dropdown used inside the "Ready to schedule?" CTA box */
+.contact-cta-box .schedule-wrap { position: relative; margin-left: 0; width: 100%; }
+.contact-cta-box .schedule-btn {
+  width: 100%; justify-content: center;
+  background: var(--navy); color: var(--cream);
+  margin-bottom: 0;
+}
+.contact-cta-box .schedule-btn:hover { background: var(--forest); }
+.contact-cta-box .schedule-dropdown { left: 0; right: 0; width: 100%; }
+
 /* Contact form */
 .contact-form-wrap { background: var(--cream); padding: 2.5rem; }
 .contact-form-wrap h3 {
