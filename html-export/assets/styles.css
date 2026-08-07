@@ -67,14 +67,9 @@ ul, ol { list-style: none; }
 
 /* ── Full CV & bio pages ─────────────────────────────────────── */
 .bio-page { background: var(--cream); }
-.bio-header { background: var(--navy); }
-.bio-header-inner { min-height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.bio-header img { width: auto; height: 3.25rem; }
-.bio-back { color: rgba(242,242,240,.72); font-family: var(--font-sub); font-size: .78rem; letter-spacing: .05em; }
-.bio-back:hover { color: var(--gold); }
 .bio-hero { background: var(--navy); padding: clamp(3rem, 7vw, 6rem) 0; }
 .bio-hero-grid { display: grid; grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; }
-.bio-portrait { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-bottom: 4px solid var(--gold); }
+.bio-portrait { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 15%; border-bottom: 4px solid var(--gold); }
 .bio-hero .section-heading { color: var(--cream); }
 .bio-hero .section-body { color: rgba(242,242,240,.72); margin-bottom: 1rem; }
 .bio-title { color: var(--gold); font-family: var(--font-sub); font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
@@ -91,9 +86,6 @@ ul, ol { list-style: none; }
 .bio-accordions ul { display: flex; flex-direction: column; gap: .7rem; padding: 1.25rem 1.5rem 1.5rem 2.25rem; list-style: disc; }
 .bio-accordions li { color: var(--muted); font-family: var(--font-sans); font-size: .95rem; line-height: 1.6; }
 @media (max-width: 700px) {
-  .bio-header-inner { min-height: 4.5rem; }
-  .bio-header img { height: 2.75rem; }
-  .bio-back { font-size: .68rem; }
   .bio-hero-grid { grid-template-columns: 1fr; }
   .bio-portrait { max-width: 18rem; }
 }
@@ -711,7 +703,7 @@ footer { background: var(--navy); }
   position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--forest);
 }
 .mediator-card-photo img {
-  width: 100%; height: 100%; object-fit: cover; object-position: top;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 20%;
   transition: transform .5s;
 }
 .mediator-card:hover .mediator-card-photo img { transform: scale(1.04); }
@@ -764,7 +756,7 @@ footer { background: var(--navy); }
   border: 2px solid var(--gold); overflow: hidden;
 }
 @media (min-width: 768px) { .atty-thumb { width: 8rem; height: 9rem; } }
-.atty-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.atty-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; }
 .sched-main {
   max-width: var(--max-w); margin-inline: auto; padding: clamp(2rem, 4vw, 4rem) var(--px);
 }
