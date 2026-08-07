@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, Mail, MapPin, ArrowLeft, Clock, CalendarDays, Info, User, ChevronDown, Send, CheckCircle } from 'lucide-react'
-import MediationCalendar from '@/components/mediation-calendar'
 
 interface SchedulingPageProps {
   attorney: {
@@ -22,7 +21,74 @@ interface SchedulingPageProps {
     calendarNote: string
     firmPhone: string           // West Coast Mediators main line
     firmEmail: string           // scheduling@westcoastmediators.com
+    // Live calendar embed URL (old WebCalendar PHP page). Stephen has his own;
+    // Kevin falls back to Stephen's since /webcalendar_kevin/month.php 404s.
+    calendarSrc: string
   }
+}
+
+/** Mirrors the calendar-frame embed used in html-export/schedule/*. */
+function LiveCalendarFrame({
+  attorneyId,
+  phone,
+  calendarSrc,
+}: {
+  attorneyId: string
+  phone: string
+  calendarSrc: string
+}) {
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [blocked, setBlocked] = useState(false)
+
+  useEffect(() => {
+    const cal = iframeRef.current
+    if (!cal) return
+    const onLoad = () => {
+      try {
+        const doc = cal.contentDocument || cal.contentWindow?.document
+        if (!doc) return
+        const s = doc.createElement('style')
+        s.textContent = [
+          '.row.minimonths, .minimonths, table.minical { display:none !important }',
+          '.navbar, nav.navbar { display:none !important }',
+          'body { margin:0 !important; padding:0 !important }',
+          'html, body { overflow:hidden !important }',
+        ].join(' ')
+        doc.head.appendChild(s)
+      } catch {
+        // cross-origin — expected unless the calendar server sets frame-ancestors
+      }
+    }
+    cal.addEventListener('load', onLoad)
+    return () => cal.removeEventListener('load', onLoad)
+  }, [])
+
+  if (blocked) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-16 px-6 text-center bg-white border border-[#d5d3d0]">
+        <CalendarDays size={32} className="text-[#5A6B66]" strokeWidth={1.5} />
+        <p className="font-[family-name:var(--font-sans)] text-[#5A6B66] text-sm leading-relaxed max-w-sm">
+          Calendar temporarily unavailable. Please call{' '}
+          <strong className="text-[#0A1B2E]">{phone}</strong> to check availability.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="bg-white border border-[#d5d3d0] overflow-hidden">
+      <iframe
+        ref={iframeRef}
+        id={`cal-${attorneyId}`}
+        src={calendarSrc}
+        title={`${attorneyId} availability calendar`}
+        loading="lazy"
+        scrolling="no"
+        style={{ width: '100%', height: 680, border: 0, overflow: 'hidden', display: 'block' }}
+        onError={() => setBlocked(true)}
+      />
+    </div>
+  )
 }
 
 const matterTypes = [
@@ -154,9 +220,10 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
                 </h2>
               </div>
 
-              <MediationCalendar
+              <LiveCalendarFrame
                 attorneyId={attorney.id}
-                attorneyName={attorney.name.split(',')[0]}
+                phone={attorney.phone}
+                calendarSrc={attorney.calendarSrc}
               />
 
               {/* Session info */}
