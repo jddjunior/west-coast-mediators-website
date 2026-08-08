@@ -46,26 +46,46 @@
     });
   }
 
-  /* ── Desktop schedule dropdown ────────────────────────────── */
-  var schedBtn      = document.querySelector('.schedule-btn');
-  var schedDropdown = document.querySelector('.schedule-dropdown');
+  /* ── Desktop schedule dropdown(s) ─────────────────────────── */
+  /* Supports multiple .schedule-wrap instances per page (e.g. the
+     nav dropdown plus an in-page CTA dropdown). */
+  var schedWraps = document.querySelectorAll('.schedule-wrap');
 
-  if (schedBtn && schedDropdown) {
-    schedBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var open = schedDropdown.classList.toggle('open');
-      schedBtn.setAttribute('aria-expanded', String(open));
+  if (schedWraps.length) {
+    var schedInstances = [];
+
+    schedWraps.forEach(function (wrap) {
+      var btn = wrap.querySelector('.schedule-btn');
+      var dropdown = wrap.querySelector('.schedule-dropdown');
+      if (!btn || !dropdown) return;
+      schedInstances.push({ btn: btn, dropdown: dropdown });
+    });
+
+    function closeAllSchedDropdowns() {
+      schedInstances.forEach(function (inst) {
+        inst.dropdown.classList.remove('open');
+        inst.btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    schedInstances.forEach(function (inst) {
+      inst.btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = !inst.dropdown.classList.contains('open');
+        closeAllSchedDropdowns();
+        if (willOpen) {
+          inst.dropdown.classList.add('open');
+          inst.btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      inst.dropdown.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
     });
 
     /* Close on outside click */
-    document.addEventListener('click', function () {
-      schedDropdown.classList.remove('open');
-      schedBtn.setAttribute('aria-expanded', 'false');
-    });
-
-    schedDropdown.addEventListener('click', function (e) {
-      e.stopPropagation();
-    });
+    document.addEventListener('click', closeAllSchedDropdowns);
   }
 
   /* ── Mobile schedule sub-accordion ───────────────────────── */
