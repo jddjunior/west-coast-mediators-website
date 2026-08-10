@@ -15,6 +15,17 @@ Two parallel deliverables exist in this repository:
 
 ---
 
+## Recent Updates
+
+- Added the full shared header and navigation to every Next.js page, including the schedule hub, individual attorney scheduling pages, and attorney bio pages. The header includes Home, About, Practice Areas, Our Mediators, Contact, the Schedule dropdown, and the responsive mobile menu.
+- Kept the static HTML export aligned with the same site-wide header. All exported pages include the shared navigation behavior through `assets/main.js`, including the exported bio pages.
+- Updated the homepage “Ready to schedule?” section by removing its phone contact card and phone CTA. “Choose Your Mediator” is now a dropdown with direct links to Stephen G. Brannan’s and Kevin B. Woods’ scheduling pages.
+- Replaced both mediator portraits throughout the Next.js app and `html-export/` with the provided Builder CDN images:
+  - Stephen G. Brannan: `e21b3bbb61244e2c8377afe9dbf6d5d4`
+  - Kevin B. Woods: `c36816fce80648e9b50804949a57bdf5`
+
+---
+
 ## Tech Stack
 
 ### Next.js Application (`/app`)
@@ -129,17 +140,15 @@ html-export/schedule/               → /public_html/schedule/
 html-export/assets/                 → /public_html/assets/
 ```
 
-Copy image assets from `public/` to the server:
+Copy local image assets from `public/` to the server:
 
 ```
 public/wcm-logo-white.jpg           → /public_html/assets/images/
 public/wcm-logo.png                 → /public_html/assets/images/
 public/hero-bg.png                  → /public_html/assets/images/
-public/stephen-brannan-crop.jpg     → /public_html/assets/images/
-public/kevin-woods.jpg              → /public_html/assets/images/
 ```
 
-Update `src` and `href` paths in the HTML files to match the server's actual directory structure.
+The mediator portraits in the app and HTML export use the Builder CDN URLs documented in **Recent Updates**, so the local `stephen-brannan-crop.jpg` and `kevin-woods.jpg` files are no longer required by the rendered pages. Update other `src` and `href` paths in the HTML files to match the server's actual directory structure.
 
 ---
 
