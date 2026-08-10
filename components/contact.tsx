@@ -1,15 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react'
+import { Mail, MapPin, Clock, Send, ChevronDown } from 'lucide-react'
 
 const contactInfo = [
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '(941) 792-1695',
-    href: 'tel:9417921695',
-  },
   {
     icon: Mail,
     label: 'Email',
@@ -39,6 +33,7 @@ export default function Contact() {
     message: '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [mediatorMenuOpen, setMediatorMenuOpen] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -124,20 +119,42 @@ export default function Contact() {
               <p className="font-[family-name:var(--font-sans)] text-[#0A1B2E]/80 text-sm leading-relaxed mb-4">
                 Choose your mediator and select a date that works for all parties.
               </p>
-              <div className="flex flex-col gap-3">
-                <a
-                  href="/schedule"
-                  className="inline-flex items-center justify-center gap-2 bg-[#0A1B2E] text-[#F2F2F0] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase px-5 py-3 hover:bg-[#23423D] transition-colors"
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setMediatorMenuOpen((open) => !open)}
+                  className="inline-flex w-full items-center justify-center gap-2 bg-[#0A1B2E] px-5 py-3 font-[family-name:var(--font-sub)] text-sm font-semibold uppercase tracking-wider text-[#F2F2F0] transition-colors hover:bg-[#23423D]"
+                  aria-expanded={mediatorMenuOpen}
+                  aria-haspopup="true"
                 >
                   Choose Your Mediator
-                </a>
-                <a
-                  href="tel:9417921695"
-                  className="inline-flex items-center justify-center gap-2 border border-[#0A1B2E] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase px-5 py-3 hover:bg-[#0A1B2E]/10 transition-colors"
-                >
-                  <Phone size={14} />
-                  (941) 792-1695
-                </a>
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${mediatorMenuOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {mediatorMenuOpen && (
+                  <div className="absolute left-0 right-0 top-full z-10 mt-1 border border-[#0A1B2E]/20 bg-[#F2F2F0] shadow-lg" role="menu">
+                    <a
+                      href="/schedule/stephen"
+                      onClick={() => setMediatorMenuOpen(false)}
+                      className="flex flex-col border-b border-[#0A1B2E]/10 px-4 py-3 font-[family-name:var(--font-sub)] text-sm text-[#0A1B2E] transition-colors hover:bg-[#23423D] hover:text-[#F2F2F0]"
+                      role="menuitem"
+                    >
+                      Stephen G. Brannan
+                      <span className="mt-0.5 font-[family-name:var(--font-sans)] text-xs opacity-60">Certified Circuit &amp; Federal Mediator</span>
+                    </a>
+                    <a
+                      href="/schedule/kevin"
+                      onClick={() => setMediatorMenuOpen(false)}
+                      className="flex flex-col px-4 py-3 font-[family-name:var(--font-sub)] text-sm text-[#0A1B2E] transition-colors hover:bg-[#23423D] hover:text-[#F2F2F0]"
+                      role="menuitem"
+                    >
+                      Kevin B. Woods
+                      <span className="mt-0.5 font-[family-name:var(--font-sans)] text-xs opacity-60">Board-Certified Civil Trial Mediator</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
