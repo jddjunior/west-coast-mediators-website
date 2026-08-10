@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Phone, Mail, MapPin, ArrowLeft, Clock, CalendarDays, Info, User, ChevronDown, Send, CheckCircle } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, CalendarDays, Info, User, ChevronDown, Send, CheckCircle } from 'lucide-react'
+import Navbar from '@/components/navbar'
 
 interface SchedulingPageProps {
   attorney: {
@@ -125,58 +126,10 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
 
-      {/* Top bar */}
-      <div className="bg-[#23423D] py-2 px-4 hidden md:block">
-        <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
-          <a
-            href={`tel:${attorney.firmPhone.replace(/\D/g, '')}`}
-            className="flex items-center gap-2 text-[#B99B5A] text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#F2F2F0] transition-colors"
-          >
-            <Phone size={13} />
-            {attorney.firmPhone}
-          </a>
-          <a
-            href={`mailto:${attorney.firmEmail}`}
-            className="text-[#F2F2F0]/80 text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#B99B5A] transition-colors"
-          >
-            {attorney.firmEmail}
-          </a>
-        </div>
-      </div>
-
-      {/* Sticky nav */}
-      <header className="bg-[#0A1B2E] sticky top-0 z-50 shadow-lg shadow-black/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 md:h-24 flex items-center justify-between">
-          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
-            <Image
-              src="/wcm-logo-white.jpg"
-              alt="West Coast Mediators"
-              width={320}
-              height={91}
-              className="h-16 w-auto hidden md:block"
-              priority
-            />
-            <Image
-              src="/wcm-logo-white.jpg"
-              alt="West Coast Mediators"
-              width={210}
-              height={60}
-              className="h-11 w-auto md:hidden"
-              priority
-            />
-          </a>
-          <Link
-            href="/schedule"
-            className="flex items-center gap-2 text-[#F2F2F0]/70 hover:text-[#B99B5A] font-[family-name:var(--font-sub)] text-sm tracking-wide transition-colors"
-          >
-            <ArrowLeft size={15} />
-            All Mediators
-          </Link>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Page hero */}
-      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A]">
+      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A] pt-20 md:pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
             <div className="relative w-24 h-28 md:w-32 md:h-36 flex-shrink-0 border-2 border-[#B99B5A] overflow-hidden">
