@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Navbar from '@/components/navbar'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Phone, Mail } from 'lucide-react'
 
@@ -17,7 +18,7 @@ const mediators = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: '/stephen-brannan-crop.jpg',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fe21b3bbb61244e2c8377afe9dbf6d5d4?format=webp&width=800&height=1200',
     tagline:
       'Thousands of civil cases mediated to successful resolution across Southwest Florida.',
     href: '/schedule/stephen',
@@ -28,7 +29,7 @@ const mediators = [
     title: 'Esq.',
     subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
     location: 'Tampa, Florida',
-    photo: '/kevin-woods.jpg',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fc36816fce80648e9b50804949a57bdf5?format=webp&width=800&height=1200',
     tagline:
       '29+ years of civil trial experience on both Plaintiff and Defense sides of the table.',
     href: '/schedule/kevin',
@@ -38,55 +39,10 @@ const mediators = [
 export default function ScheduleHubPage() {
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
-      {/* Header */}
-      <header className="bg-[#0A1B2E] shadow-lg shadow-black/20">
-        <div className="bg-[#23423D] py-2 px-4 hidden md:block">
-          <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
-            <a
-              href="tel:9417921695"
-              className="flex items-center gap-2 text-[#B99B5A] text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#F2F2F0] transition-colors"
-            >
-              <Phone size={13} />
-              (941) 792-1695
-            </a>
-            <a
-              href="mailto:scheduling@westcoastmediators.com"
-              className="text-[#F2F2F0]/80 text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#B99B5A] transition-colors"
-            >
-              scheduling@westcoastmediators.com
-            </a>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 md:h-24 flex items-center justify-between">
-          <a href="/" aria-label="West Coast Mediators — Home" className="shrink-0">
-            <Image
-              src="/wcm-logo-white.jpg"
-              alt="West Coast Mediators"
-              width={320}
-              height={91}
-              className="h-16 w-auto hidden md:block"
-              priority
-            />
-            <Image
-              src="/wcm-logo-white.jpg"
-              alt="West Coast Mediators"
-              width={210}
-              height={60}
-              className="h-11 w-auto md:hidden"
-              priority
-            />
-          </a>
-          <a
-            href="/"
-            className="font-[family-name:var(--font-sub)] text-[#F2F2F0]/60 text-sm tracking-wide hover:text-[#B99B5A] transition-colors"
-          >
-            &larr; Back to Home
-          </a>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero strip */}
-      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A]">
+      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A] pt-20 md:pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 text-center">
           <p className="font-[family-name:var(--font-sub)] text-[#B99B5A] text-xs tracking-[0.35em] uppercase mb-4">
             West Coast Mediators
