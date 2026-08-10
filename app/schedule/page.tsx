@@ -18,7 +18,7 @@ const mediators = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: '/stephen-brannan-crop.jpg',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fe21b3bbb61244e2c8377afe9dbf6d5d4?format=webp&width=800&height=1200',
     tagline:
       'Thousands of civil cases mediated to successful resolution across Southwest Florida.',
     href: '/schedule/stephen',
@@ -29,7 +29,7 @@ const mediators = [
     title: 'Esq.',
     subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
     location: 'Tampa, Florida',
-    photo: '/kevin-woods.jpg',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fc36816fce80648e9b50804949a57bdf5?format=webp&width=800&height=1200',
     tagline:
       '29+ years of civil trial experience on both Plaintiff and Defense sides of the table.',
     href: '/schedule/kevin',
