@@ -189,6 +189,8 @@ export default function Navbar() {
             <button
               onClick={() => setMobileScheduleOpen(!mobileScheduleOpen)}
               className="w-full flex items-center justify-between px-6 py-3 text-[#B99B5A] font-[family-name:var(--font-sub)] text-sm tracking-wide font-semibold"
+              aria-expanded={mobileScheduleOpen}
+              aria-haspopup="true"
             >
               Schedule
               <ChevronDown
