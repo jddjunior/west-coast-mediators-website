@@ -23,7 +23,7 @@ const stephen = {
     'Review Stephen\'s live calendar below, then send a scheduling request or call directly to confirm your mediation session.',
   firmPhone: '(941) 792-1695',
   firmEmail: 'schedule-sb@westcoastmediators.com',
-  calendarSrc: 'https://www.westcoastmediators.com/webcalendar_joe/month.php',
+  calendarSrc: 'https://www.westcoastmediators.com/webcalendar_joe/week.php',
 }
 
 export default function StephenSchedulePage() {

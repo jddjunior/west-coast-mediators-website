@@ -24,8 +24,8 @@ const kevin = {
   firmPhone: '(941) 792-1695',
   firmEmail: 'schedule-kw@westcoastmediators.com',
   // Kevin doesn't have his own dedicated calendar file on the legacy server
-  // (webcalendar_kevin/month.php 404s), so fall back to the working one.
-  calendarSrc: 'https://www.westcoastmediators.com/webcalendar_joe/month.php',
+  // (webcalendar_kevin/week.php 404s), so fall back to the working one.
+  calendarSrc: 'https://www.westcoastmediators.com/webcalendar_joe/week.php',
 }
 
 export default function KevinSchedulePage() {
