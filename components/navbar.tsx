@@ -107,7 +107,12 @@ export default function Navbar() {
             ))}
 
             {/* Schedule dropdown */}
-            <div className="relative ml-2" ref={dropdownRef}>
+            <div
+              className="relative ml-2"
+              ref={dropdownRef}
+              onMouseEnter={() => setScheduleOpen(true)}
+              onMouseLeave={() => setScheduleOpen(false)}
+            >
               <button
                 onClick={() => setScheduleOpen(!scheduleOpen)}
                 className="flex items-center gap-1.5 px-4 lg:px-6 py-2 bg-[#B99B5A] text-[#0A1B2E] font-[family-name:var(--font-sub)] text-sm font-semibold tracking-wider uppercase hover:bg-[#c9ab6a] transition-colors duration-200"

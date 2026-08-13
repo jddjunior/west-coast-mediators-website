@@ -144,7 +144,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
                 alt={attorney.name}
                 fill
                 className="object-cover"
-                style={{ objectPosition: 'center 15%' }}
+                style={{ objectPosition: 'center 27%' }}
                 sizes="128px"
               />
             </div>
