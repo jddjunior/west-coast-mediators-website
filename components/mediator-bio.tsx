@@ -29,7 +29,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: '/stephen-brannan.png',
+    photo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stephen-brannan-uY5f79scbKWbVR4sRbIsZvC8H12QTk.jpg',
     bio: [
       'Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.',
       'His experience spans every major category of civil litigation — from personal injury and medical malpractice to complex commercial and real property disputes. Attorneys and insurance professionals across Southwest Florida trust his process to deliver results.',
@@ -94,7 +94,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
     location: 'Tampa, Florida',
-    photo: '/kevin-woods.jpg',
+    photo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kevin-woods-G8s9hXkq91QnX8mGFKD35oAeO2ZZz6.jpg',
     bio: [
       'Kevin Britt Woods is a third-generation Tampa native and a Board-Certified Civil Trial Lawyer whose practice has focused exclusively on civil trial matters since 1997. He represents both Plaintiffs and Defendants and brings more than 29 years of litigation experience to every mediation.',
       'Kevin has handled matters involving traumatic and mild traumatic brain injury, wrongful death, spinal cord injury, automotive accidents, products liability, premises liability, trucking accidents, medical malpractice, and complex commercial litigation — giving him the firsthand perspective to guide parties toward resolution.',
