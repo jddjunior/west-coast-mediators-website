@@ -18,7 +18,7 @@ const mediators = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: '/stephen-brannan-crop.jpg',
+    photo: '/stephen-brannan.png',
     tagline:
       'Thousands of civil cases mediated to successful resolution across Southwest Florida.',
     href: '/schedule/stephen',

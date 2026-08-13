@@ -29,7 +29,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: '/stephen-brannan-crop.jpg',
+    photo: '/stephen-brannan.png',
     bio: [
       'Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.',
       'His experience spans every major category of civil litigation — from personal injury and medical malpractice to complex commercial and real property disputes. Attorneys and insurance professionals across Southwest Florida trust his process to deliver results.',
