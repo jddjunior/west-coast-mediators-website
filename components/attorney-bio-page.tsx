@@ -33,6 +33,7 @@ export default function AttorneyBioPage({ attorneyId }: { attorneyId: 'stephen' 
               <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold md:text-6xl">{attorney.name}</h1>
               <p className="mt-4 font-[family-name:var(--font-sub)] text-sm uppercase tracking-[0.18em] text-[#D5D3D0]">{attorney.subtitle}</p>
               <p className="mt-3 font-[family-name:var(--font-sub)] text-xs uppercase tracking-[0.2em] text-[#B99B5A]">{attorney.location}</p>
+              <a href={`mailto:${attorney.email}`} className="mt-3 inline-block break-all font-[family-name:var(--font-sub)] text-xs tracking-wide text-[#D5D3D0] transition-colors hover:text-[#B99B5A]">{attorney.email}</a>
             </div>
           </div>
         </div>

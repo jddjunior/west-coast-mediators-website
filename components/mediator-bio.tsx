@@ -17,6 +17,7 @@ export type Attorney = {
   title: string
   subtitle: string
   location: string
+  email: string
   photo: string
   bio: string[]
   sections: BioSection[]
@@ -29,6 +30,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
+    email: 'schedulesb@westcoastmediators.com',
     photo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stephen-brannan-uY5f79scbKWbVR4sRbIsZvC8H12QTk.jpg',
     bio: [
       'Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.',
@@ -94,6 +96,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
     location: 'Tampa, Florida',
+    email: 'schedulekw@westcoastmediators.com',
     photo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kevin-woods-G8s9hXkq91QnX8mGFKD35oAeO2ZZz6.jpg',
     bio: [
       'Kevin Britt Woods is a third-generation Tampa native and a Board-Certified Civil Trial Lawyer whose practice has focused exclusively on civil trial matters since 1997. He represents both Plaintiffs and Defendants and brings more than 29 years of litigation experience to every mediation.',

@@ -343,7 +343,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
 
                   {/* Disclaimer */}
                   <p className="font-[family-name:var(--font-sans)] text-[#A7A9AC] text-xs leading-relaxed">
-                    This form routes directly to {attorney.receptionistLabel}. Submissions are
+                    This form routes directly to {attorney.email}. Submissions are
                     reviewed within one business day. For urgent matters, please call{' '}
                     <a href={`tel:${attorney.phone.replace(/\D/g, '')}`} className="text-[#23423D] hover:underline">
                       {attorney.phone}
