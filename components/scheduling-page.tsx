@@ -23,7 +23,7 @@ interface SchedulingPageProps {
     firmPhone: string           // West Coast Mediators main line
     firmEmail: string           // scheduling@westcoastmediators.com
     // Live calendar embed URL (old WebCalendar PHP page). Stephen has his own;
-    // Kevin falls back to Stephen's since /webcalendar_kevin/month.php 404s.
+    // Kevin falls back to Stephen's since /webcalendar_kevin/week.php 404s.
     calendarSrc: string
   }
 }
@@ -144,7 +144,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
                 alt={attorney.name}
                 fill
                 className="object-cover"
-                style={{ objectPosition: 'center 15%' }}
+                style={{ objectPosition: 'center 27%' }}
                 sizes="128px"
               />
             </div>
