@@ -11,7 +11,7 @@ Two parallel deliverables exist in this repository:
 | Deliverable | Location | Status |
 |---|---|---|
 | Next.js app (live preview + Vercel deploy) | `/app`, `/components` | Live — deploys on merge to `main` |
-| Static HTML export (for PHP server hosting) | `/html-export` | Complete — ready to upload to server |
+| Static HTML export (for PHP server hosting) | `/html-exports-new` | Complete — ready to upload to server |
 
 ---
 
@@ -20,7 +20,7 @@ Two parallel deliverables exist in this repository:
 - Added the full shared header and navigation to every Next.js page, including the schedule hub, individual attorney scheduling pages, and attorney bio pages. The header includes Home, About, Practice Areas, Our Mediators, Contact, the Schedule dropdown, and the responsive mobile menu.
 - Kept the static HTML export aligned with the same site-wide header. All exported pages include the shared navigation behavior through `assets/main.js`, including the exported bio pages.
 - Updated the homepage “Ready to schedule?” section by removing its phone contact card and phone CTA. “Choose Your Mediator” is now a dropdown with direct links to Stephen G. Brannan’s and Kevin B. Woods’ scheduling pages.
-- Replaced both mediator portraits throughout the Next.js app and `html-export/` with the provided Builder CDN images:
+- Replaced both mediator portraits throughout the Next.js app and `html-exports-new/` with the provided Builder CDN images:
   - Stephen G. Brannan: `e21b3bbb61244e2c8377afe9dbf6d5d4`
   - Kevin B. Woods: `c36816fce80648e9b50804949a57bdf5`
 
@@ -41,7 +41,7 @@ Two parallel deliverables exist in this repository:
 | Sharp | 0.35 | Image processing |
 | Vercel Analytics | 1.6.1 | Usage analytics |
 
-### Static HTML Export (`/html-export`)
+### Static HTML Export (`/html-exports-new`)
 
 | Technology | Purpose |
 |---|---|
@@ -72,7 +72,7 @@ Two parallel deliverables exist in this repository:
 The HTML export mirrors the same structure:
 
 ```
-html-export/
+html-exports-new/
   index.html
   schedule/
     index.html
@@ -132,12 +132,12 @@ The static HTML export uses `<iframe>` tags pointing to the PHP calendar directl
 
 ### 1. Upload the HTML export to the PHP server
 
-Copy `html-export/` contents to the web root:
+Copy `html-exports-new/` contents to the web root:
 
 ```
-html-export/index.html              → /public_html/index.html
-html-export/schedule/               → /public_html/schedule/
-html-export/assets/                 → /public_html/assets/
+html-exports-new/index.html              → /public_html/index.html
+html-exports-new/schedule/               → /public_html/schedule/
+html-exports-new/assets/                 → /public_html/assets/
 ```
 
 Copy local image assets from `public/` to the server:
@@ -188,7 +188,7 @@ header("Content-Security-Policy: frame-ancestors 'self' https://westcoastmediato
 2. Create a new MySQL database (suggested: `wcm_webcalendar_kevin`, user: `wcm_cal_user`)
 3. Edit `webcalendar_kevin/settings.php` with Kevin's database credentials
 4. Run `webcalendar_kevin/install/index.php` to initialize the schema
-5. Update the iframe `src` in `html-export/schedule/kevin/index.html` from the placeholder URL to the live URL
+5. Update the iframe `src` in `html-exports-new/schedule/kevin/index.html` from the placeholder URL to the live URL
 
 ---
 

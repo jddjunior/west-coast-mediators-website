@@ -1,6 +1,6 @@
 {
   "buildCommand": null,
-  "outputDirectory": "html-export",
+  "outputDirectory": "html-exports-new",
   "framework": null,
   "rewrites": [
     { "source": "/schedule/stephen", "destination": "/schedule/stephen/index.html" },
