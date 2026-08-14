@@ -29,7 +29,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Certified Circuit & Federal Court Mediator',
     location: 'Sarasota, Florida',
-    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fe21b3bbb61244e2c8377afe9dbf6d5d4?format=webp&width=800&height=1200',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2F9b17d566f6b1429a92e515b1f51a3cbf?format=webp&width=800&height=1200',
     bio: [
       'Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.',
       'His experience spans every major category of civil litigation — from personal injury and medical malpractice to complex commercial and real property disputes. Attorneys and insurance professionals across Southwest Florida trust his process to deliver results.',
@@ -94,7 +94,7 @@ export const attorneys: Attorney[] = [
     title: 'Esq.',
     subtitle: 'Board-Certified Civil Trial Attorney & Mediator',
     location: 'Tampa, Florida',
-    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2Fc36816fce80648e9b50804949a57bdf5?format=webp&width=800&height=1200',
+    photo: 'https://cdn.builder.io/api/v1/image/assets%2F57fd5e85f28146269960c5b0fe53c10e%2F0f1958b8cfff416992f03f72a781501c?format=webp&width=800&height=1200',
     bio: [
       'Kevin Britt Woods is a third-generation Tampa native and a Board-Certified Civil Trial Lawyer whose practice has focused exclusively on civil trial matters since 1997. He represents both Plaintiffs and Defendants and brings more than 29 years of litigation experience to every mediation.',
       'Kevin has handled matters involving traumatic and mild traumatic brain injury, wrongful death, spinal cord injury, automotive accidents, products liability, premises liability, trucking accidents, medical malpractice, and complex commercial litigation — giving him the firsthand perspective to guide parties toward resolution.',
