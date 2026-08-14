@@ -13,7 +13,6 @@ const navLinks = [
 ]
 
 const scheduleLinks = [
-  { label: 'Schedule a Mediation', href: '/schedule', sub: 'Choose a mediator' },
   { label: 'Stephen G. Brannan', href: '/schedule/stephen', sub: 'Sarasota, FL' },
   { label: 'Kevin B. Woods', href: '/schedule/kevin', sub: 'Tampa, FL' },
 ]
@@ -50,25 +49,6 @@ export default function Navbar() {
           : 'bg-[#0A1B2E]/80 backdrop-blur-sm'
       }`}
     >
-      {/* Top contact bar */}
-      <div className="bg-[#23423D] py-2 px-4 hidden md:block">
-        <div className="max-w-7xl mx-auto flex items-center justify-end gap-8">
-          <a
-            href="tel:9417921695"
-            className="flex items-center gap-2 text-[#B99B5A] text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#F2F2F0] transition-colors"
-          >
-            <Phone size={13} />
-            (941) 792-1695
-          </a>
-          <a
-            href="mailto:scheduling@westcoastmediators.com"
-            className="text-[#F2F2F0]/80 text-sm font-[family-name:var(--font-sub)] tracking-wide hover:text-[#B99B5A] transition-colors"
-          >
-            scheduling@westcoastmediators.com
-          </a>
-        </div>
-      </div>
-
       {/* Main nav */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 md:h-24">

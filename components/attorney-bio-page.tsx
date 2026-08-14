@@ -26,7 +26,7 @@ export default function AttorneyBioPage({ attorneyId }: { attorneyId: 'stephen' 
           </Link>
           <div className="grid items-end gap-10 md:grid-cols-[220px_1fr]">
             <div className="relative aspect-[4/5] overflow-hidden border border-[#B99B5A]/50 bg-[#0A1B2E]">
-              <Image src={attorney.photo} alt={`${attorney.name} portrait`} fill className="object-cover object-top" sizes="220px" priority />
+              <Image src={attorney.photo} alt={`${attorney.name} portrait`} fill className="object-cover" style={{ objectPosition: 'center 27%' }} sizes="220px" priority />
             </div>
             <div>
               <p className="mb-4 font-[family-name:var(--font-sub)] text-xs uppercase tracking-[0.3em] text-[#B99B5A]">Full CV &amp; Bio</p>

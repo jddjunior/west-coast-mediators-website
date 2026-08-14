@@ -224,7 +224,8 @@ function AttorneyCard({ attorney }: { attorney: Attorney }) {
           src={attorney.photo}
           alt={`${attorney.name} — ${attorney.subtitle}`}
           fill
-          className="object-cover object-top"
+          className="object-cover"
+          style={{ objectPosition: 'center 27%' }}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#B99B5A]" />
