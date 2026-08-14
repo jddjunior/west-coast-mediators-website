@@ -13,7 +13,6 @@ const navLinks = [
 ]
 
 const scheduleLinks = [
-  { label: 'Schedule a Mediation', href: '/schedule', sub: 'Choose a mediator' },
   { label: 'Stephen G. Brannan', href: '/schedule/stephen', sub: 'Sarasota, FL' },
   { label: 'Kevin B. Woods', href: '/schedule/kevin', sub: 'Tampa, FL' },
 ]
