@@ -170,7 +170,9 @@ ul, ol { list-style: none; }
   box-shadow: 0 8px 32px rgba(0,0,0,.4);
   display: none; z-index: 200;
 }
-.schedule-dropdown.open { display: block; }
+.schedule-dropdown.open,
+.schedule-wrap:hover .schedule-dropdown,
+.schedule-wrap:focus-within .schedule-dropdown { display: block; }
 .schedule-dropdown a {
   display: flex; flex-direction: column;
   padding: .75rem 1rem;
