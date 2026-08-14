@@ -129,7 +129,7 @@ export default function SchedulingPage({ attorney }: SchedulingPageProps) {
       <Navbar />
 
       {/* Page hero */}
-      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A] pt-20 md:pt-32">
+      <div className="bg-[#0A1B2E] border-b-4 border-[#B99B5A] pt-28 md:pt-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
             <div className="relative w-24 h-28 md:w-32 md:h-36 flex-shrink-0 border-2 border-[#B99B5A] overflow-hidden">
