@@ -1,0 +1,897 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&family=Montserrat:wght@500;600;700&family=Lato:wght@400;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Lato', 'Helvetica Neue', sans-serif; background: #0A1B2E; cursor: none; }
+    a { color: #B99B5A; text-decoration: none; }
+    a:hover { color: #D4B87A; }
+    ::selection { background: #B99B5A; color: #0A1B2E; }
+
+    /* ---------- custom cursor ---------- */
+    #cursor-dot, #cursor-ring {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 999;
+      border-radius: 50%; transform: translate(-50%,-50%);
+    }
+    #cursor-dot { width: 6px; height: 6px; background: #B99B5A; }
+    #cursor-ring {
+      width: 34px; height: 34px; border: 1px solid rgba(185,155,90,0.55);
+      transition: width .25s ease, height .25s ease, border-color .25s ease, background .25s ease;
+    }
+    #cursor-ring.cursor-hover { width: 56px; height: 56px; background: rgba(185,155,90,0.08); border-color: #B99B5A; }
+    @media (max-width: 860px) { #cursor-dot, #cursor-ring { display: none; } body { cursor: auto; } }
+
+    /* ---------- progress bar ---------- */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 998;
+      background: linear-gradient(90deg,#B99B5A,#F2E4C6,#B99B5A);
+      transform: scaleX(0); transform-origin: left; transition: transform .08s linear;
+    }
+
+    /* ---------- grain ---------- */
+    #grain {
+      position: fixed; inset: -100px; z-index: 997; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grainShift 8s steps(8) infinite;
+    }
+    @keyframes grainShift {
+      0% { transform: translate(0,0); } 25% { transform: translate(-2%,2%); }
+      50% { transform: translate(2%,-1%); } 75% { transform: translate(-1%,-2%); } 100% { transform: translate(0,0); }
+    }
+
+    /* ---------- reveal-on-scroll ---------- */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ---------- split-text hero words ---------- */
+    .word { display: inline-block; opacity: 0; transform: translateY(28px); animation: wordUp .8s cubic-bezier(.16,1,.3,1) forwards; }
+    @keyframes wordUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ---------- marquee ---------- */
+    .marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ---------- floating gradient blobs ---------- */
+    .blob { position: absolute; border-radius: 50%; filter: blur(70px); animation: floatBlob 16s ease-in-out infinite; }
+    @keyframes floatBlob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(40px,-50px) scale(1.12); }
+    }
+
+    /* ---------- bounce ---------- */
+    @keyframes softBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+    /* ---------- spotlight ---------- */
+    .spotlight { position: relative; }
+    .spotlight::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background: radial-gradient(480px circle at var(--mx,50%) var(--my,50%), rgba(185,155,90,0.10), transparent 55%);
+      opacity: 0; transition: opacity .4s ease;
+    }
+    .spotlight:hover::before { opacity: 1; }
+
+    /* ---------- tilt cards ---------- */
+    .tilt { transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease; transform-style: preserve-3d; will-change: transform; }
+
+    /* ---------- magnetic buttons ---------- */
+    .magnetic { transition: transform .3s cubic-bezier(.16,1,.3,1); display: inline-flex; }
+
+    /* ---------- scramble text ---------- */
+    .scramble { font-variant-numeric: tabular-nums; }
+
+    /* ---------- back to top ---------- */
+    #back-to-top {
+      position: fixed; right: 22px; bottom: 22px; z-index: 900; width: 46px; height: 46px; border-radius: 50%;
+      background: #B99B5A; display: flex; align-items: center; justify-content: center; cursor: pointer;
+      opacity: 0; transform: translateY(16px) scale(.85); pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease; box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+    #back-to-top.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+    #back-to-top:hover { background: #D4B87A; }
+
+    /* ---------- form inputs ---------- */
+    .field-input {
+      width: 100%; border: 1px solid #d5d3d0; background: #ffffff; padding: 13px 14px; color: #0A1B2E;
+      font-family: 'Lato', sans-serif; font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .field-input:focus { outline: none; border-color: #23423D; box-shadow: 0 0 0 3px rgba(35,66,61,0.12); }
+    .field-input::placeholder { color: #A7A9AC; }
+
+    .motion-off .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .motion-off .word { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .motion-off .blob { animation: none !important; }
+    .motion-off .marquee-track { animation-duration: 60s !important; }
+    .motion-off .tilt { transform: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .word { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ---------- nav states ---------- */
+    .nav-top { background: rgba(10,27,46,0.75); backdrop-filter: blur(8px); }
+    .nav-scrolled { background: #0A1B2E; box-shadow: 0 12px 32px rgba(0,0,0,0.28); }
+    .nav-link::after { content: ''; position: absolute; left: 50%; bottom: 4px; width: 0; height: 1px; background: #B99B5A; transition: width .3s ease, left .3s ease; }
+    .nav-link:hover::after { width: calc(100% - 28px); left: 14px; }
+    .nav-link:hover { color: #B99B5A !important; }
+    .chev-open { transform: rotate(180deg); }
+
+    /* ---------- practice area cards ---------- */
+    .area-card { transition: background .3s ease; }
+    .area-card:hover { background: rgba(35,66,61,0.35); }
+
+    @media (max-width: 900px) {
+      .nav-desktop { display: none !important; }
+      .nav-mobile-toggle { display: block !important; }
+      .pillars-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .areas-grid { grid-template-columns: 1fr !important; }
+      .areas-last { grid-column: span 1 !important; }
+      .mediators-grid { grid-template-columns: 1fr !important; }
+      .contact-grid { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr 1fr !important; }
+    }
+    @media (max-width: 560px) {
+      .form-row { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</helmet>
+
+<div class="{{ pageClass }}" id="dc-page" style="position:relative; background:#F2F2F0; overflow-x:clip;">
+
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div id="progress-bar"></div>
+  <div id="grain"></div>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="{{ navClass }}" style="position:fixed; top:0; left:0; right:0; z-index:200; transition: background .3s ease, box-shadow .3s ease, backdrop-filter .3s ease;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:84px;">
+
+      <!-- Wordmark -->
+      <a href="#home" style="display:flex; flex-direction:column; line-height:1;">
+        <span style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.32em; color:#F2F2F0; text-transform:uppercase;">West Coast</span>
+        <span style="font-family:'Playfair Display',serif; font-weight:700; font-size:22px; letter-spacing:0.06em; color:#B99B5A; margin-top:2px;">MEDIATORS</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav style="display:flex; align-items:center; gap:4px;" class="nav-desktop">
+        <a href="#home" class="nav-link" style="position:relative; padding:10px 14px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.05em; color:rgba(242,242,240,0.8);">Home</a>
+        <a href="#about" class="nav-link" style="position:relative; padding:10px 14px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.05em; color:rgba(242,242,240,0.8);">About</a>
+        <a href="#practice-areas" class="nav-link" style="position:relative; padding:10px 14px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.05em; color:rgba(242,242,240,0.8);">Practice Areas</a>
+        <a href="#mediators" class="nav-link" style="position:relative; padding:10px 14px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.05em; color:rgba(242,242,240,0.8);">Our Mediators</a>
+        <a href="#contact" class="nav-link" style="position:relative; padding:10px 14px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.05em; color:rgba(242,242,240,0.8);">Contact</a>
+
+        <div style="position:relative; margin-left:10px;">
+          <button onClick="{{ toggleSchedule }}" class="magnetic" style="display:flex; align-items:center; gap:6px; padding:11px 22px; background:#B99B5A; color:#0A1B2E; border:none; font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer;">
+            Schedule
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="{{ scheduleChevronClass }}" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+
+          <sc-if value="{{ scheduleOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; right:0; top:calc(100% + 8px); width:230px; background:#0A1B2E; border:1px solid rgba(185,155,90,0.3); box-shadow:0 20px 48px rgba(0,0,0,0.45);">
+              <a href="#" style="display:block; padding:14px 16px; border-bottom:1px solid rgba(185,155,90,0.15);">
+                <span style="display:block; font-family:'Montserrat',sans-serif; font-size:13px; color:#F2F2F0;">Stephen G. Brannan</span>
+                <span style="display:block; font-family:'Lato',sans-serif; font-size:11px; color:rgba(242,242,240,0.4); margin-top:2px;">Sarasota, FL</span>
+              </a>
+              <a href="#" style="display:block; padding:14px 16px;">
+                <span style="display:block; font-family:'Montserrat',sans-serif; font-size:13px; color:#F2F2F0;">Kevin B. Woods</span>
+                <span style="display:block; font-family:'Lato',sans-serif; font-size:11px; color:rgba(242,242,240,0.4); margin-top:2px;">Tampa, FL</span>
+              </a>
+            </div>
+          </sc-if>
+        </div>
+      </nav>
+
+      <!-- Mobile toggle -->
+      <button onClick="{{ toggleMobileMenu }}" class="nav-mobile-toggle" style="display:none; background:none; border:none; color:#F2F2F0; padding:8px; cursor:pointer;">
+        <sc-if value="{{ mobileMenuOpen }}" hint-placeholder-val="{{ false }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </sc-if>
+        <sc-if value="{{ mobileMenuClosed }}" hint-placeholder-val="{{ true }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </sc-if>
+      </button>
+    </div>
+
+    <sc-if value="{{ mobileMenuOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#0A1B2E; border-top:1px solid rgba(185,155,90,0.3); padding-bottom:12px;">
+        <a href="#home" style="display:block; padding:14px 24px; font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(242,242,240,0.85); border-bottom:1px solid rgba(255,255,255,0.06);">Home</a>
+        <a href="#about" style="display:block; padding:14px 24px; font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(242,242,240,0.85); border-bottom:1px solid rgba(255,255,255,0.06);">About</a>
+        <a href="#practice-areas" style="display:block; padding:14px 24px; font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(242,242,240,0.85); border-bottom:1px solid rgba(255,255,255,0.06);">Practice Areas</a>
+        <a href="#mediators" style="display:block; padding:14px 24px; font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(242,242,240,0.85); border-bottom:1px solid rgba(255,255,255,0.06);">Our Mediators</a>
+        <a href="#contact" style="display:block; padding:14px 24px; font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(242,242,240,0.85);">Contact</a>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="home" style="position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0A1B2E;">
+
+    <div id="hero-bg-layer" style="position:absolute; inset:-10%; z-index:0;">
+      <div class="blob" style="width:520px; height:520px; top:-140px; left:-120px; background:radial-gradient(circle,#23423D,transparent 70%); opacity:.8;"></div>
+      <div class="blob" style="width:460px; height:460px; bottom:-160px; right:-100px; background:radial-gradient(circle,#B99B5A,transparent 70%); opacity:.28; animation-delay:-6s;"></div>
+      <div class="blob" style="width:320px; height:320px; top:30%; right:8%; background:radial-gradient(circle,#5A6B66,transparent 70%); opacity:.35; animation-delay:-11s;"></div>
+    </div>
+    <div style="position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, rgba(10,27,46,0.4), rgba(10,27,46,0.92) 80%);"></div>
+    <div style="position:absolute; inset:0; z-index:0; opacity:.05; background-image:repeating-linear-gradient(45deg,#B99B5A 0px,#B99B5A 1px,transparent 0px,transparent 46px);"></div>
+
+    <div style="position:relative; z-index:2; text-align:center; padding:120px 24px 40px; max-width:900px; margin:0 auto;">
+      <p class="scramble" data-final="SARASOTA, FLORIDA" style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:13px; letter-spacing:0.4em; text-transform:uppercase; margin:0 0 28px;">SARASOTA, FLORIDA</p>
+
+      <h1 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:clamp(38px,7vw,76px); font-weight:700; line-height:1.08; margin:0 0 16px;">
+        <span class="word" style="animation-delay:.05s;">Resolving</span> <span class="word" style="animation-delay:.15s;">Conflict.</span><br>
+        <span class="word" style="animation-delay:.28s; font-style:italic; color:#B99B5A;">Restoring</span> <span class="word" style="animation-delay:.4s; font-style:italic; color:#B99B5A;">Solutions.</span>
+      </h1>
+
+      <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin:28px 0;">
+        <div style="height:1px; width:80px; background:#B99B5A;"></div>
+        <div style="width:6px; height:6px; background:#B99B5A; transform:rotate(45deg);"></div>
+        <div style="height:1px; width:80px; background:#B99B5A;"></div>
+      </div>
+
+      <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:15px; letter-spacing:0.28em; text-transform:uppercase; font-weight:600; margin:0 0 24px;">Experienced &nbsp; Impartial &nbsp; Effective</p>
+
+      <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.78); font-size:17px; line-height:1.7; max-width:600px; margin:0 auto 44px;">
+        West Coast Mediators are certified Federal and State Circuit Court mediators. We have mediated thousands of cases to successful conclusions across many areas of civil law.
+      </p>
+
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px;">
+        <a href="#contact" class="magnetic" style="padding:17px 38px; background:#B99B5A; color:#0A1B2E; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; box-shadow:0 0 0 rgba(185,155,90,0.5);">Schedule Mediation</a>
+        <a href="#about" class="magnetic" style="padding:17px 38px; border:1px solid rgba(242,242,240,0.4); color:#F2F2F0; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;">Learn More</a>
+      </div>
+
+      <div style="margin-top:56px; display:inline-flex; align-items:center; gap:12px; background:rgba(255,255,255,0.05); backdrop-filter:blur(6px); border:1px solid rgba(185,155,90,0.3); padding:14px 22px;">
+        <div style="width:1px; height:28px; background:#B99B5A;"></div>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.7); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin:0;">Certified Federal &amp; State Circuit Court Mediators</p>
+      </div>
+    </div>
+
+    <div style="position:absolute; bottom:28px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; animation:softBounce 2.2s ease-in-out infinite; z-index:2;">
+      <div style="width:1px; height:38px; background:rgba(185,155,90,0.5);"></div>
+      <div style="width:5px; height:5px; border-radius:50%; background:#B99B5A;"></div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE STRIP ============ -->
+  <div style="background:#B99B5A; overflow:hidden; padding:14px 0;">
+    <div class="marquee-track">
+      <span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#0A1B2E; white-space:nowrap; padding:0 22px;">Federal Court Certified &nbsp;✦&nbsp; State Circuit Court Certified &nbsp;✦&nbsp; Sarasota, Florida &nbsp;✦&nbsp; Tampa, Florida &nbsp;✦&nbsp; Thousands Of Cases Resolved &nbsp;✦&nbsp;</span>
+      <span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#0A1B2E; white-space:nowrap; padding:0 22px;" aria-hidden="true">Federal Court Certified &nbsp;✦&nbsp; State Circuit Court Certified &nbsp;✦&nbsp; Sarasota, Florida &nbsp;✦&nbsp; Tampa, Florida &nbsp;✦&nbsp; Thousands Of Cases Resolved &nbsp;✦&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ============ STATS BANNER ============ -->
+  <div style="background:#0A1B2E; border-bottom:1px solid rgba(185,155,90,0.2);">
+    <div style="max-width:1280px; margin:0 auto; padding:52px 24px; display:grid; grid-template-columns:repeat(2,1fr); gap:32px;" class="stats-grid">
+      <div class="reveal" style="text-align:center; padding:0 16px; border-right:1px solid rgba(185,155,90,0.15);">
+        <p class="scramble" data-final="Thousands" style="font-family:'Playfair Display',serif; color:#B99B5A; font-size:30px; font-weight:700; margin:0 0 6px;">Thousands</p>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0;">Cases Mediated</p>
+      </div>
+      <div class="reveal" style="transition-delay:.08s; text-align:center; padding:0 16px;">
+        <p class="scramble" data-final="Federal" style="font-family:'Playfair Display',serif; color:#B99B5A; font-size:30px; font-weight:700; margin:0 0 6px;">Federal</p>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0;">Court Certified</p>
+      </div>
+      <div class="reveal" style="transition-delay:.16s; text-align:center; padding:0 16px; border-right:1px solid rgba(185,155,90,0.15);">
+        <p class="scramble" data-final="State" style="font-family:'Playfair Display',serif; color:#B99B5A; font-size:30px; font-weight:700; margin:0 0 6px;">State</p>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0;">Circuit Court Certified</p>
+      </div>
+      <div class="reveal" style="transition-delay:.24s; text-align:center; padding:0 16px;">
+        <p class="scramble" data-final="SW Florida" style="font-family:'Playfair Display',serif; color:#B99B5A; font-size:30px; font-weight:700; margin:0 0 6px;">SW Florida</p>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0;">Serving Since Decades</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" style="background:#F2F2F0; padding:110px 24px;">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto 72px;">
+        <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 16px;">About West Coast Mediators</p>
+        <h2 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:clamp(28px,4vw,44px); font-weight:700; margin:0 0 24px;">Trusted Mediation Services in Southwest Florida</h2>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:28px;">
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+          <div style="width:6px; height:6px; background:#B99B5A; transform:rotate(45deg);"></div>
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+        </div>
+        <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:16px; line-height:1.75; margin:0;">West Coast Mediators are certified Federal and State Circuit Court mediators. We have mediated thousands of cases to a successful conclusion involving many areas of civil law. Our commitment is to provide an impartial, professional forum for dispute resolution — saving you time, expense, and the uncertainty of trial.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px;" class="pillars-grid">
+        <div class="tilt reveal" style="background:#fff; border:1px solid #d5d3d0; padding:36px 28px; text-align:center;">
+          <div style="width:56px; height:56px; margin:0 auto 20px; border:1px solid rgba(35,66,61,0.2); display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#23423D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7h6"/><path d="M13 7h6"/><path d="M3 7l3 6a3.2 3.2 0 0 0 6 0L9 7"/><path d="M15 7l3 6a3.2 3.2 0 0 0 6 0l-3-6"/></svg>
+          </div>
+          <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:19px; font-weight:700; margin:0 0 10px;">Fairness</h3>
+          <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:14px; line-height:1.65; margin:0;">Every party is heard equally. We ensure a balanced, neutral process that respects all perspectives.</p>
+        </div>
+
+        <div class="tilt reveal" style="transition-delay:.08s; background:#fff; border:1px solid #d5d3d0; padding:36px 28px; text-align:center;">
+          <div style="width:56px; height:56px; margin:0 auto 20px; border:1px solid rgba(35,66,61,0.2); display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#23423D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6"/><path d="M20 17l-6-6"/><path d="M4 7v6h6"/><path d="M20 7v6h-6"/></svg>
+          </div>
+          <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:19px; font-weight:700; margin:0 0 10px;">Resolution</h3>
+          <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:14px; line-height:1.65; margin:0;">We guide parties toward durable, mutually beneficial agreements — avoiding the cost of litigation.</p>
+        </div>
+
+        <div class="tilt reveal" style="transition-delay:.16s; background:#fff; border:1px solid #d5d3d0; padding:36px 28px; text-align:center;">
+          <div style="width:56px; height:56px; margin:0 auto 20px; border:1px solid rgba(35,66,61,0.2); display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#23423D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:19px; font-weight:700; margin:0 0 10px;">Trust</h3>
+          <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:14px; line-height:1.65; margin:0;">Our mediators are trusted by attorneys and parties throughout Southwest Florida for decades of service.</p>
+        </div>
+
+        <div class="tilt reveal" style="transition-delay:.24s; background:#fff; border:1px solid #d5d3d0; padding:36px 28px; text-align:center;">
+          <div style="width:56px; height:56px; margin:0 auto 20px; border:1px solid rgba(35,66,61,0.2); display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#23423D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4"/><path d="M9 7h.01M15 7h.01M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/></svg>
+          </div>
+          <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:19px; font-weight:700; margin:0 0 10px;">Experience</h3>
+          <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:14px; line-height:1.65; margin:0;">Thousands of cases mediated across federal and state courts. Deep expertise in complex civil matters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRACTICE AREAS ============ -->
+  <section id="practice-areas" class="spotlight" style="background:#0A1B2E; padding:110px 24px; position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; opacity:.035; background-image:repeating-linear-gradient(45deg,#B99B5A 0px,#B99B5A 1px,transparent 0px,transparent 50px);"></div>
+    <div style="position:relative; max-width:1280px; margin:0 auto; z-index:2;">
+      <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto 64px;">
+        <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 16px;">Our Expertise</p>
+        <h2 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:clamp(28px,4vw,44px); font-weight:700; margin:0 0 24px;">Areas of Practice</h2>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:28px;">
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+          <div style="width:6px; height:6px; background:#B99B5A; transform:rotate(45deg);"></div>
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+        </div>
+        <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.65); font-size:16px; line-height:1.75; margin:0;">Our mediators bring deep experience across the full spectrum of civil litigation, helping parties reach resolution in even the most complex disputes.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(185,155,90,0.1);" class="areas-grid">
+        <div class="reveal area-card" style="background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.22 12H9.5l.7-1.5 2 4 1.6-3.2 1.1 1.7h5.88"/><path d="M19 13.5c1.5-1.5 2.5-3 2.5-4.74A3.76 3.76 0 0 0 17.74 5c-1.16 0-2.2.5-2.94 1.3L12 9.5 9.2 6.3A3.9 3.9 0 0 0 6.26 5 3.76 3.76 0 0 0 2.5 8.76c0 1.74 1 3.24 2.5 4.74L12 20.5Z"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Personal Injury</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Auto accidents, slip-and-fall, wrongful death, and other personal injury disputes resolved efficiently.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card" style="transition-delay:.05s; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v6.5a2.5 2.5 0 0 0 5 0V5"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/><path d="M8 15V9a4 4 0 0 1 4-4"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Medical &amp; Legal Malpractice</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Complex professional liability cases handled with the technical depth they require.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card" style="transition-delay:.1s; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.25 3.5 9.5 8 11 4.5-1.5 8-5.75 8-11V5Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Insurance Disputes</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Coverage disputes, bad faith claims, and insurance litigation settled outside the courtroom.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card" style="transition-delay:.15s; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Business Disputes</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Partnership conflicts, breach of contract, shareholder disputes, and commercial litigation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card" style="transition-delay:.2s; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Real Property</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Boundary disputes, easements, landlord-tenant issues, and real estate transaction conflicts.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card" style="transition-delay:.25s; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M5 18a7 7 0 0 1 14 0"/><path d="M12 3v6"/><rect x="9" y="16" width="6" height="4" rx="1"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Construction</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Contractor disputes, defect claims, delay damages, and construction project conflicts.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal area-card areas-last" style="transition-delay:.3s; grid-column:span 3; background:#0A1B2E; padding:32px;">
+          <div style="display:flex; gap:18px; align-items:flex-start; max-width:420px;">
+            <div style="flex-shrink:0; width:46px; height:46px; border:1px solid rgba(185,155,90,0.3); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+            </div>
+            <div>
+              <h3 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:17px; font-weight:700; margin:0 0 8px;">Contract Disputes</h3>
+              <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.6; margin:0;">Breach of contract, commercial agreements, vendor disputes, and service contract claims.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="text-align:center; margin-top:48px;">
+        <a href="#contact" class="magnetic" style="display:inline-flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:13px; letter-spacing:0.18em; text-transform:uppercase;">
+          Discuss Your Case
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEDIATORS ============ -->
+  <section id="mediators" style="background:#F2F2F0; padding:110px 24px;">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto 64px;">
+        <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 16px;">Our Team</p>
+        <h2 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:clamp(28px,4vw,44px); font-weight:700; margin:0 0 24px;">Meet the Mediators</h2>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:28px;">
+          <div style="height:1px; width:48px; background:rgba(185,155,90,0.4);"></div>
+          <div style="height:3px; width:36px; background:#B99B5A;"></div>
+          <div style="height:1px; width:48px; background:rgba(185,155,90,0.4);"></div>
+        </div>
+        <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:16px; line-height:1.75; margin:0;">Certified Federal and State Circuit Court mediators with decades of combined civil litigation experience serving Sarasota, Tampa, and all of Southwest Florida.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:40px;" class="mediators-grid">
+
+        <div class="tilt reveal" style="background:#fff; border:1px solid #d5d3d0;">
+          <div style="position:relative; aspect-ratio:16/10; background:linear-gradient(135deg,#23423D,#0A1B2E); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+            <span style="font-family:'Playfair Display',serif; font-size:96px; font-weight:700; color:rgba(185,155,90,0.35); letter-spacing:-0.02em;">SB</span>
+            <div style="position:absolute; bottom:0; left:0; right:0; height:4px; background:#B99B5A;"></div>
+          </div>
+          <div style="padding:36px;">
+            <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 8px;">Certified Circuit &amp; Federal Court Mediator</p>
+            <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:27px; font-weight:700; margin:0 0 4px;">Stephen G. Brannan</h3>
+            <p style="font-family:'Montserrat',sans-serif; color:#5A6B66; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; margin:0 0 20px;">Esq. &mdash; Sarasota, Florida</p>
+            <div style="height:1px; background:rgba(185,155,90,0.3); margin-bottom:20px;"></div>
+            <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:15px; line-height:1.7; margin:0 0 14px;">Stephen G. Brannan has dedicated his legal career to helping parties resolve disputes without the burden and expense of protracted litigation. As a certified Federal and State Circuit Court mediator, he brings a thorough understanding of civil law, sharp analytical skills, and a patient, principled approach to every session.</p>
+            <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:15px; line-height:1.7; margin:0 0 28px;">His experience spans every major category of civil litigation — from personal injury and medical malpractice to complex commercial and real property disputes.</p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a href="#" class="magnetic" style="flex:1; min-width:150px; justify-content:center; padding:15px; border:1px solid #23423D; color:#23423D; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; text-align:center;">Full CV &amp; Bio</a>
+              <a href="#" class="magnetic" style="flex:1; min-width:150px; justify-content:center; align-items:center; gap:8px; padding:15px; background:#23423D; color:#F2F2F0; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; text-align:center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Schedule with Stephen
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="tilt reveal" style="transition-delay:.1s; background:#fff; border:1px solid #d5d3d0;">
+          <div style="position:relative; aspect-ratio:16/10; background:linear-gradient(135deg,#23423D,#0A1B2E); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+            <span style="font-family:'Playfair Display',serif; font-size:96px; font-weight:700; color:rgba(185,155,90,0.35); letter-spacing:-0.02em;">KW</span>
+            <div style="position:absolute; bottom:0; left:0; right:0; height:4px; background:#B99B5A;"></div>
+          </div>
+          <div style="padding:36px;">
+            <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 8px;">Board-Certified Civil Trial Attorney &amp; Mediator</p>
+            <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:27px; font-weight:700; margin:0 0 4px;">Kevin B. Woods</h3>
+            <p style="font-family:'Montserrat',sans-serif; color:#5A6B66; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; margin:0 0 20px;">Esq. &mdash; Tampa, Florida</p>
+            <div style="height:1px; background:rgba(185,155,90,0.3); margin-bottom:20px;"></div>
+            <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:15px; line-height:1.7; margin:0 0 14px;">Kevin Britt Woods is a third-generation Tampa native and a Board-Certified Civil Trial Lawyer whose practice has focused exclusively on civil trial matters since 1997. He brings more than 29 years of litigation experience to every mediation.</p>
+            <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:15px; line-height:1.7; margin:0 0 28px;">Kevin has handled matters involving traumatic brain injury, wrongful death, spinal cord injury, automotive accidents, products liability, and complex commercial litigation.</p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a href="#" class="magnetic" style="flex:1; min-width:150px; justify-content:center; padding:15px; border:1px solid #23423D; color:#23423D; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; text-align:center;">Full CV &amp; Bio</a>
+              <a href="#" class="magnetic" style="flex:1; min-width:150px; justify-content:center; align-items:center; gap:8px; padding:15px; background:#23423D; color:#F2F2F0; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; text-align:center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Schedule with Kevin
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="spotlight" style="background:#23423D; padding:110px 24px; position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; opacity:.04; background-image:repeating-linear-gradient(-45deg,#F2F2F0 0px,#F2F2F0 1px,transparent 0px,transparent 50px);"></div>
+    <div style="position:relative; max-width:1100px; margin:0 auto; z-index:2;">
+      <div class="reveal" style="text-align:center; max-width:560px; margin:0 auto 56px;">
+        <p style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; margin:0 0 16px;">Get In Touch</p>
+        <h2 style="font-family:'Playfair Display',serif; color:#F2F2F0; font-size:clamp(28px,4vw,44px); font-weight:700; margin:0 0 24px;">Schedule a Mediation</h2>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:24px;">
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+          <div style="width:6px; height:6px; background:#B99B5A; transform:rotate(45deg);"></div>
+          <div style="height:1px; width:48px; background:#B99B5A;"></div>
+        </div>
+        <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.65); font-size:15px; line-height:1.7; margin:0;">Ready to resolve your dispute? Contact our scheduling coordinator to arrange your mediation session. We respond promptly to all inquiries.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:2fr 3fr; gap:32px;" class="contact-grid">
+        <div class="reveal" style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; align-items:flex-start; gap:14px; background:rgba(10,27,46,0.3); border:1px solid rgba(242,242,240,0.1); padding:18px;">
+            <div style="width:38px; height:38px; flex-shrink:0; border:1px solid rgba(185,155,90,0.4); display:flex; align-items:center; justify-content:center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+            </div>
+            <div>
+              <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin:0 0 4px;">Phone</p>
+              <a href="tel:9417921695" style="font-family:'Lato',sans-serif; color:#F2F2F0; font-size:14px;">(941) 792-1695</a>
+            </div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:14px; background:rgba(10,27,46,0.3); border:1px solid rgba(242,242,240,0.1); padding:18px;">
+            <div style="width:38px; height:38px; flex-shrink:0; border:1px solid rgba(185,155,90,0.4); display:flex; align-items:center; justify-content:center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+            </div>
+            <div>
+              <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin:0 0 4px;">Email</p>
+              <a href="mailto:scheduling@westcoastmediators.com" style="font-family:'Lato',sans-serif; color:#F2F2F0; font-size:14px; word-break:break-all;">scheduling@westcoastmediators.com</a>
+            </div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:14px; background:rgba(10,27,46,0.3); border:1px solid rgba(242,242,240,0.1); padding:18px;">
+            <div style="width:38px; height:38px; flex-shrink:0; border:1px solid rgba(185,155,90,0.4); display:flex; align-items:center; justify-content:center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.5); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin:0 0 4px;">Location</p>
+              <p style="font-family:'Lato',sans-serif; color:#F2F2F0; font-size:14px; margin:0;">Sarasota, Florida</p>
+            </div>
+          </div>
+
+          <div style="background:#B99B5A; padding:26px; margin-top:6px;">
+            <p style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:20px; font-weight:700; margin:0 0 8px;">Ready to schedule?</p>
+            <p style="font-family:'Lato',sans-serif; color:rgba(10,27,46,0.8); font-size:14px; line-height:1.6; margin:0 0 18px;">Choose your mediator and select a date that works for all parties.</p>
+            <a href="#" class="magnetic" style="justify-content:center; width:100%; padding:15px; background:#0A1B2E; color:#F2F2F0; font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; text-align:center;">Choose Your Mediator</a>
+          </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:.1s; background:#F2F2F0; padding:40px;">
+          <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 20px;">
+              <div style="width:64px; height:64px; border:2px solid #23423D; display:flex; align-items:center; justify-content:center; margin-bottom:22px;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#23423D" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+              </div>
+              <h3 style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:24px; font-weight:700; margin:0 0 12px;">Message Received</h3>
+              <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:15px; line-height:1.65; max-width:320px; margin:0;">Thank you for reaching out. We will respond to your inquiry within one business day.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ handleSubmit }}">
+              <p style="font-family:'Playfair Display',serif; color:#0A1B2E; font-size:20px; font-weight:700; margin:0 0 4px;">Send Us a Message</p>
+              <p style="font-family:'Lato',sans-serif; color:#5A6B66; font-size:13px; margin:0 0 22px;">All fields marked * are required.</p>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;" class="form-row">
+                <div>
+                  <label style="display:block; font-family:'Montserrat',sans-serif; color:#0A1B2E; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Full Name *</label>
+                  <input class="field-input" type="text" placeholder="Your full name" />
+                </div>
+                <div>
+                  <label style="display:block; font-family:'Montserrat',sans-serif; color:#0A1B2E; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Email *</label>
+                  <input class="field-input" type="email" placeholder="your@email.com" />
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;" class="form-row">
+                <div>
+                  <label style="display:block; font-family:'Montserrat',sans-serif; color:#0A1B2E; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Phone</label>
+                  <input class="field-input" type="tel" placeholder="(941) 000-0000" />
+                </div>
+                <div>
+                  <label style="display:block; font-family:'Montserrat',sans-serif; color:#0A1B2E; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Matter Type *</label>
+                  <select class="field-input">
+                    <option>Select type...</option>
+                    <option>Personal Injury</option>
+                    <option>Business Dispute</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-bottom:22px;">
+                <label style="display:block; font-family:'Montserrat',sans-serif; color:#0A1B2E; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Message *</label>
+                <textarea class="field-input" rows="4" placeholder="Briefly describe the nature of your dispute and preferred scheduling..." style="resize:none;"></textarea>
+              </div>
+
+              <button type="submit" class="magnetic" style="padding:16px 40px; background:#23423D; color:#F2F2F0; border:none; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer;">Send Message</button>
+            </form>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:#0A1B2E;">
+    <div style="background:#23423D; border-bottom:1px solid rgba(185,155,90,0.2); padding:18px 24px;">
+      <div style="max-width:1280px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:28px;">
+        <span style="display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.75); font-size:12px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Sarasota, Florida
+        </span>
+        <a href="tel:9417921695" style="display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.75); font-size:12px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          (941) 792-1695
+        </a>
+        <span style="display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.75); font-size:12px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B99B5A" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>
+          westcoastmediators.com
+        </span>
+      </div>
+    </div>
+
+    <div style="max-width:1280px; margin:0 auto; padding:64px 24px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;" class="footer-grid">
+      <div>
+        <div style="display:flex; flex-direction:column; line-height:1; margin-bottom:18px;">
+          <span style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.32em; color:#F2F2F0; text-transform:uppercase;">West Coast</span>
+          <span style="font-family:'Playfair Display',serif; font-weight:700; font-size:24px; letter-spacing:0.06em; color:#B99B5A; margin-top:3px;">MEDIATORS</span>
+        </div>
+        <p style="font-family:'Montserrat',sans-serif; color:rgba(242,242,240,0.4); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin:0 0 14px;">Stephen G. Brannan, Esq. &amp; Kevin B. Woods, Esq.</p>
+        <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.55); font-size:14px; line-height:1.7; margin:0;">Certified Federal &amp; State Circuit Court Mediators serving Sarasota and Southwest Florida. Resolving conflict. Restoring solutions.</p>
+      </div>
+      <div>
+        <h4 style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0 0 18px;">Navigation</h4>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <a href="#home" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Home</a>
+          <a href="#about" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">About</a>
+          <a href="#practice-areas" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Practice Areas</a>
+          <a href="#mediators" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Our Mediators</a>
+          <a href="#contact" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Contact</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0 0 18px;">Scheduling</h4>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <a href="#" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Schedule a Mediation</a>
+          <a href="#" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Stephen G. Brannan, Esq.</a>
+          <a href="#" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Kevin B. Woods, Esq.</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:'Montserrat',sans-serif; color:#B99B5A; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; margin:0 0 18px;">Practice Areas</h4>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <a href="#practice-areas" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Personal Injury</a>
+          <a href="#practice-areas" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Insurance Disputes</a>
+          <a href="#practice-areas" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Business Disputes</a>
+          <a href="#practice-areas" style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.6); font-size:14px;">Construction</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(242,242,240,0.1); padding:20px 24px;">
+      <div style="max-width:1280px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
+        <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.35); font-size:12px; margin:0;">&copy; {{ year }} West Coast Mediators. All rights reserved.</p>
+        <p style="font-family:'Lato',sans-serif; color:rgba(242,242,240,0.35); font-size:12px; margin:0;">Certified Federal &amp; State Circuit Court Mediators &mdash; Sarasota, Florida</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="back-to-top" onClick="{{ scrollToTop }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A1B2E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"reduceMotion":{"editor":"boolean","default":false,"section":"Motion"}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      scrolled: false,
+      mobileMenuOpen: false,
+      scheduleOpen: false,
+      submitted: false,
+    };
+    this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
+    this.toggleSchedule = this.toggleSchedule.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.scrollToTop = this.scrollToTop.bind(this);
+  }
+
+  toggleMobileMenu() {
+    this.setState({ mobileMenuOpen: !this.state.mobileMenuOpen });
+  }
+
+  toggleSchedule() {
+    this.setState({ scheduleOpen: !this.state.scheduleOpen });
+  }
+
+  handleSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    this.setState({ submitted: true });
+  }
+
+  scrollToTop(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  componentDidMount() {
+    var self = this;
+    var reduceMotion = !!this.props.reduceMotion;
+    var doc = document;
+
+    // ---------- custom cursor ----------
+    var dot = doc.getElementById('cursor-dot');
+    var ring = doc.getElementById('cursor-ring');
+    var mx = 0, my = 0, rx = 0, ry = 0;
+    if (dot && ring) {
+      doc.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
+      });
+      (function loop() {
+        rx += (mx - rx) * 0.18;
+        ry += (my - ry) * 0.18;
+        ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+        requestAnimationFrame(loop);
+      })();
+      var hoverables = doc.querySelectorAll('a, button, .magnetic, .tilt, input, textarea, select');
+      for (var i = 0; i < hoverables.length; i++) {
+        hoverables[i].addEventListener('mouseenter', function () { ring.classList.add('cursor-hover'); });
+        hoverables[i].addEventListener('mouseleave', function () { ring.classList.remove('cursor-hover'); });
+      }
+    }
+
+    // ---------- scroll: progress bar, nav state, parallax, back-to-top ----------
+    var progressBar = doc.getElementById('progress-bar');
+    var heroLayer = doc.getElementById('hero-bg-layer');
+    var backToTop = doc.getElementById('back-to-top');
+    var ticking = false;
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var scrollTop = window.scrollY || doc.documentElement.scrollTop;
+        var max = doc.documentElement.scrollHeight - window.innerHeight;
+        var pct = max > 0 ? Math.min(scrollTop / max, 1) : 0;
+        if (progressBar) progressBar.style.transform = 'scaleX(' + pct + ')';
+        if (heroLayer && !reduceMotion) heroLayer.style.transform = 'translateY(' + (scrollTop * 0.18) + 'px)';
+        if (backToTop) backToTop.classList.toggle('visible', scrollTop > 700);
+
+        var nowScrolled = scrollTop > 60;
+        if (nowScrolled !== self.state.scrolled) self.setState({ scrolled: nowScrolled });
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ---------- reveal on scroll ----------
+    var revealEls = doc.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      for (var r = 0; r < revealEls.length; r++) io.observe(revealEls[r]);
+    } else {
+      for (var r2 = 0; r2 < revealEls.length; r2++) revealEls[r2].classList.add('in');
+    }
+
+    // ---------- scramble text ----------
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    function scramble(el) {
+      var final = el.getAttribute('data-final') || el.textContent;
+      var frame = 0;
+      var totalFrames = 14;
+      var interval = setInterval(function () {
+        var out = '';
+        for (var c = 0; c < final.length; c++) {
+          var ch = final[c];
+          if (ch === ' ' || ch === ',') { out += ch; continue; }
+          var revealPoint = (c / final.length) * totalFrames;
+          out += frame > revealPoint ? ch : chars[Math.floor(Math.random() * chars.length)];
+        }
+        el.textContent = out;
+        frame++;
+        if (frame > totalFrames) { el.textContent = final; clearInterval(interval); }
+      }, 38);
+    }
+    var scrambleEls = doc.querySelectorAll('.scramble');
+    if ('IntersectionObserver' in window) {
+      var sio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            if (!reduceMotion) scramble(entry.target);
+            sio.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6 });
+      for (var s = 0; s < scrambleEls.length; s++) sio.observe(scrambleEls[s]);
+    }
+
+    // ---------- magnetic buttons ----------
+    if (!reduceMotion) {
+      var magnets = doc.querySelectorAll('.magnetic');
+      for (var m = 0; m < magnets.length; m++) {
+        (function (el) {
+          el.addEventListener('mousemove', function (e) {
+            var rect = el.getBoundingClientRect();
+            var dx = e.clientX - (rect.left + rect.width / 2);
+            var dy = e.clientY - (rect.top + rect.height / 2);
+            el.style.transform = 'translate(' + (dx * 0.25) + 'px,' + (dy * 0.3) + 'px)';
+          });
+          el.addEventListener('mouseleave', function () {
+            el.style.transform = 'translate(0,0)';
+          });
+        })(magnets[m]);
+      }
+
+      // ---------- tilt cards ----------
+      var tilts = doc.querySelectorAll('.tilt');
+      for (var t = 0; t < tilts.length; t++) {
+        (function (el) {
+          el.addEventListener('mousemove', function (e) {
+            var rect = el.getBoundingClientRect();
+            var px = (e.clientX - rect.left) / rect.width - 0.5;
+            var py = (e.clientY - rect.top) / rect.height - 0.5;
+            el.style.transform = 'perspective(900px) rotateY(' + (px * 8) + 'deg) rotateX(' + (py * -8) + 'deg) translateY(-4px)';
+          });
+          el.addEventListener('mouseleave', function () {
+            el.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateY(0)';
+          });
+        })(tilts[t]);
+      }
+    }
+
+    // ---------- spotlight ----------
+    var spotlights = doc.querySelectorAll('.spotlight');
+    for (var sp = 0; sp < spotlights.length; sp++) {
+      (function (el) {
+        el.addEventListener('mousemove', function (e) {
+          var rect = el.getBoundingClientRect();
+          var xPct = ((e.clientX - rect.left) / rect.width) * 100;
+          var yPct = ((e.clientY - rect.top) / rect.height) * 100;
+          el.style.setProperty('--mx', xPct + '%');
+          el.style.setProperty('--my', yPct + '%');
+        });
+      })(spotlights[sp]);
+    }
+  }
+
+  renderVals() {
+    return {
+      pageClass: this.props.reduceMotion ? 'motion-off' : '',
+      navClass: this.state.scrolled ? 'nav-scrolled' : 'nav-top',
+      scheduleOpen: this.state.scheduleOpen,
+      scheduleChevronClass: this.state.scheduleOpen ? 'chev-open' : '',
+      mobileMenuOpen: this.state.mobileMenuOpen,
+      mobileMenuClosed: !this.state.mobileMenuOpen,
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      toggleMobileMenu: this.toggleMobileMenu,
+      toggleSchedule: this.toggleSchedule,
+      handleSubmit: this.handleSubmit,
+      scrollToTop: this.scrollToTop,
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

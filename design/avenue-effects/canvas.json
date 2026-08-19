@@ -1,0 +1,9 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 6400, "expand": "fill" }
+  ],
+  "annotations": [
+    { "id": "brief-summary", "x": 1500, "y": 0, "w": 340, "text": "West Coast Mediators homepage, restyled with screentune.app-style motion — real brand tokens (navy/forest/gold, Playfair + Montserrat + Lato), real site copy.\n\nEffects: custom cursor, scroll progress bar, film-grain overlay, parallax hero blobs, split-text headline reveal, marquee ribbon, scramble/decode stat text, scroll-triggered reveals, magnetic buttons, 3D tilt cards, cursor-spotlight glow on dark sections, animated nav + mobile menu, working contact form state.\n\nToggle the Motion tweak above the artboard to compare with effects off." }
+  ],
+  "launch": { "view": "focused", "file": "Main.dc.html" }
+}
